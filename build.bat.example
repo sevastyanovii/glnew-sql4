@@ -1,0 +1,5 @@
+set java_home=C:\JDK\jdk1.8.0_131
+
+mvn clean install -Ptest-trunk -Doutput_charset=utf8 -Dinput_charset=utf8
+
+

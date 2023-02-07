@@ -1,0 +1,7 @@
+set JAVA_HOME="C:\JDK\jdk1.8.0_131"
+
+git commit -m "Commit before releasing"
+
+git push
+
+mvn release:clean release:prepare release:perform -DscmCommentPrefix="->>BUILDING VERSION<<-" -Darguments="-DskipTests -Dmaven.javadoc.skip=true -Doutput_charset=utf8 -Dinput_charset=utf8" -DpreparationGoals="" -Dresume=false -DdryRun=false -Dfile.encoding=utf8 -Pbuild-patch -e -X

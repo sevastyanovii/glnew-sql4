@@ -1,0 +1,14 @@
+Последовательность применения шаблонов
+
+
+init_trunk.ftl
+check_versiont_trunk.ftl
+instaLbackupt_trunk.ftl
+	stop_jobs.ftl
+
+item.ftl
+
+install_version_trunk.ftl
+script_completed_trunk.ftl
+	check_errors.ftl
+	start_jobs.ftl

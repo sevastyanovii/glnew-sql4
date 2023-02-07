@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<versions xmlns="www.sqlpatchbuilder.org"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="www.sqlpatchbuilder.org xsd/versions.xsd">
+
+    <release>
+        <module>GlNew</module>
+        <version>0.0.1</version>
+        <applyedTo>
+            <version>0.0.0</version>
+        </applyedTo>
+        <defaultSchema>GLNEW</defaultSchema>
+        <!--
+        -->
+    </release>
+
+</versions>

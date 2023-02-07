@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.rbt</groupId>
+    <artifactId>glnew-sql</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>${artifactId}:${project.packaging}:${project.version}</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.rbt</groupId>
+            <artifactId>barsgl-sql-module</artifactId>
+            <version>3.1.45-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.22</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>SQL</directory>
+                <targetPath>SQL</targetPath>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies1</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-dependencies2</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <configuration>
+                            <tasks>
+                                <echo message="upgrade xsd's" />
+                                <delete dir="xsd/unzip" failonerror="false" />
+                                <unjar dest="xsd/unzip">
+                                    <patternset>
+                                        <include name="**/*.xsd" />
+                                    </patternset>
+                                    <fileset dir="${project.build.directory}">
+                                        <include name="barsgl*sources.jar" />
+                                    </fileset>
+                                </unjar>
+                                <copy todir="xsd" flatten="true" overwrite="true">
+                                    <fileset dir="xsd/unzip">
+                                        <include name="**/*.xsd" />
+                                    </fileset>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>build-patch</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>sync</id>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <mkdir dir="releases/${artifactId}-${project.version}" />
+                                        <property name="release.dir" location="releases/${artifactId}-${project.version}" />
+                                        <property name="version.file" location="versions.xml" />
+                                        <property name="script.file" location="${release.dir}/patch-${project.version}.sql" />
+                                        <property name="rollback.file" location="${release.dir}/rollback-${project.version}.sql" />
+                                        <property name="tagname" value="${artifactId}-${project.version}" />
+                                        <property name="branch_name" value="branch_${tagname}" />
+                                        <property name="git-branch-bat" location="git-scripts/git-branch.bat" />
+                                        <property name="git-action-bat" location="git-scripts/git-action.bat" />
+
+                                        <echo message="${release.dir}" />
+                                        <echo message="${script.file}" />
+                                        <echo message="${rollback.file}" />
+
+                                        <delete file="${script.file}" />
+                                        <delete file="${rollback.file}" />
+                                        <echo message="Building patch: '${project.version}'" />
+                                        <path id="project.classpath">
+                                            <fileset dir="${project.build.directory}">
+                                                <include name="barsgl-sql*.jar" />
+                                                <include name="freemarker*.jar" />
+                                            </fileset>
+                                        </path>
+                                        <property name="current_dir" location="." />
+                                        <echo message="Executing 'git checkout -b...' in ${current_dir}" />
+                                        <exec executable="cmd" failonerror="true" dir=".">
+                                            <arg line="/A /C ${git-branch-bat} ${tagname} ${branch_name}" />
+                                        </exec>
+                                        <java classname="ru.rbt.sqlmodule.PatchBuilderMainVersion" fork="true" failonerror="true" classpathref="project.classpath">
+                                            <arg value="${version.file}" />
+                                            <arg value="${project.version}" />
+                                            <jvmarg value="-Doutput_charset=${output_charset}" />
+                                            <jvmarg value="-Dinput_charset=${input_charset}" />
+                                        </java>
+                                        <echo message="Moving sql patch scripts to release directory: ${release.dir}" />
+                                        <move todir="${release.dir}">
+                                            <fileset dir=".">
+                                                <include name="*.sql" />
+                                            </fileset>
+                                        </move>
+                                        <exec executable="cmd" failonerror="true" dir=".">
+                                            <arg line="/A /C ${git-action-bat} ${release.dir} ${script.file} ${rollback.file} ${project.version} ${branch_name}" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>build-patch-unix</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>sync</id>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <mkdir dir="releases/${artifactId}-${project.version}" />
+                                        <property name="release.dir" location="releases/${artifactId}-${project.version}" />
+                                        <property name="version.file" location="versions.xml" />
+                                        <property name="script.file" location="${release.dir}/patch-${project.version}.sql" />
+                                        <property name="rollback.file" location="${release.dir}/rollback-${project.version}.sql" />
+                                        <property name="tagname" value="${artifactId}-${project.version}" />
+                                        <property name="branch_name" value="branch_${tagname}" />
+                                        <property name="git-branch-sh" location="git-scripts/git-branch.sh" />
+                                        <property name="git-action-sh" location="git-scripts/git-action.sh" />
+
+                                        <echo message="${release.dir}" />
+                                        <echo message="${script.file}" />
+                                        <echo message="${rollback.file}" />
+
+                                        <delete file="${script.file}" />
+                                        <delete file="${rollback.file}" />
+                                        <echo message="Building patch: '${project.version}'" />
+                                        <path id="project.classpath">
+                                            <fileset dir="${project.build.directory}">
+                                                <include name="barsgl-sql*.jar" />
+                                                <include name="freemarker*.jar" />
+                                            </fileset>
+                                        </path>
+                                        <property name="current_dir" location="." />
+                                        <echo message="Executing 'git checkout -b...' in ${current_dir}" />
+                                        <exec executable="${git-branch-sh}" failonerror="true" osfamily="unix">
+                                            <env key="TAG" value="${tagname}" />
+                                            <env key="BRANCH" value="${branch_name}" />
+                                        </exec>
+                                        <java classname="ru.rbt.sqlmodule.PatchBuilderMainVersion" fork="true" failonerror="true" classpathref="project.classpath">
+                                            <arg value="${version.file}" />
+                                            <arg value="${project.version}" />
+                                            <jvmarg value="-Doutput_charset=${output_charset}" />
+                                            <jvmarg value="-Dinput_charset=${input_charset}" />
+                                        </java>
+                                        <echo message="Moving sql patch scripts to release directory: ${release.dir}" />
+                                        <move todir="${release.dir}">
+                                            <fileset dir=".">
+                                                <include name="*.sql" />
+                                            </fileset>
+                                        </move>
+                                        <exec executable="${git-action-sh}" failonerror="true" osfamily="unix">
+                                            <env key="RELEASE_DIR" value="${release.dir}" />
+                                            <env key="PATCH_FILE" value="${script.file}" />
+                                            <env key="ROLLBACK_FILE" value="${rollback.file}" />
+                                            <env key="VERSION" value="${project.version}" />
+                                            <env key="BRANCH" value="${branch_name}" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>test-version</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>sync</id>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <property name="version.file" location="versions.xml" />
+                                        <property name="script.file" location="patch-${sqlVersion}.sql" />
+                                        <property name="rollback.file" location="rollback-${sqlVersion}.sql" />
+
+                                        <echo message="Building patch: '${sqlVersion}'" />
+                                        <echo message="${script.file}" />
+                                        <echo message="${rollback.file}" />
+
+                                        <delete file="${script.file}" />
+                                        <delete file="${rollback.file}" />
+                                        <echo message="Building patch: '${project.version}'" />
+                                        <path id="project.classpath">
+                                            <fileset dir="${project.build.directory}">
+                                                <include name="barsgl-sql*.jar" />
+                                                <include name="freemarker*.jar" />
+                                            </fileset>
+                                        </path>
+                                        <property name="current_dir" location="." />
+                                        <java classname="ru.rbt.sqlmodule.PatchBuilderMainVersion" fork="true" failonerror="true" classpathref="project.classpath">
+                                            <arg value="${version.file}" />
+                                            <arg value="${sqlVersion}" />
+                                            <jvmarg value="-Doutput_charset=${output_charset}" />
+                                            <jvmarg value="-Dinput_charset=${input_charset}" />
+                                        </java>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>test-trunk</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>sync</id>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <!--building scripts-->
+                                        <delete file="trunk.sql" />
+                                        <delete file="rollback.sql" />
+                                        <delete file="TEST-TRUNK/trunk.sql" />
+                                        <delete file="TEST-TRUNK/rollback.sql" />
+                                        <property name="trunk.file" location="trunk.xml" />
+                                        <echo message="Building trunk.sql" />
+                                        <path id="project.classpath">
+                                            <fileset dir="${project.build.directory}">
+                                                <include name="barsgl-sql*.jar" />
+                                                <include name="freemarker*.jar" />
+                                            </fileset>
+                                        </path>
+                                        <java classname="ru.rbt.sqlmodule.PatchBuilderMainTrunk" fork="true" failonerror="true" classpathref="project.classpath">
+                                            <arg value="${trunk.file}" />
+                                            <jvmarg value="-Doutput_charset=${output_charset}" />
+                                            <jvmarg value="-Dinput_charset=${input_charset}" />
+                                        </java>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>test-trunk-run-sql</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>sync</id>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <!--building scripts-->
+                                        <delete file="trunk.sql" />
+                                        <delete file="rollback.sql" />
+                                        <delete file="TEST-TRUNK/trunk.sql" />
+                                        <delete file="TEST-TRUNK/rollback.sql" />
+                                        <property name="trunk.file" location="trunk.xml" />
+                                        <echo message="Building trunk.sql" />
+                                        <path id="project.classpath">
+                                            <fileset dir="${project.build.directory}">
+                                                <include name="barsgl-sql*.jar" />
+                                                <include name="freemarker*.jar" />
+                                            </fileset>
+                                        </path>
+                                        <java classname="ru.rbt.sqlmodule.PatchBuilderMainTrunk" fork="true" failonerror="true" classpathref="project.classpath">
+                                            <arg value="${trunk.file}" />
+                                            <jvmarg value="-Doutput_charset=${output_charset}" />
+                                            <jvmarg value="-Dinput_charset=${input_charset}" />
+                                        </java>
+                                        <!--runing scripts-->
+                                        <copy todir="TEST-TRUNK/">
+                                            <fileset dir=".">
+                                                <include name="trunk.sql" />
+                                                <include name="rollback.sql" />
+                                            </fileset>
+                                        </copy>
+                                        <exec executable="cmd" failonerror="true" dir="TEST-TRUNK">
+                                            <arg line="/A /C run-trunk-script.bat" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
