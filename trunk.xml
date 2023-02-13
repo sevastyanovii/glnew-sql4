@@ -11,7 +11,7 @@
 
     <item itemName="it0.0.1-001">
         <body>
-            DEFINE NEED_DROP = 'APPUSER,OD,CAL,CURRENCY,CURRATES,BNKBR,FCBR,CBCTP,DICTERM,SRCPST,CBBS,ACCTNAME,ACTPARM,FCGLACTYPE,DOCTYPE,CUSTOMER,CUSTOMER_H,CUSTLOAD,ACC,ACC_H,ACOPENRQS'
+            DEFINE NEED_DROP = 'APPUSER,AUDIT,OD,CAL,CURRENCY,CURRATES,BNKBR,FCBR,CBCTP,DICTERM,SRCPST,CBBS,ACCTNAME,ACTPARM,FCGLACTYPE,DOCTYPE,CUSTOMER,CUSTOMER_H,CUSTLOAD,ACC,ACC_H,ACOPENRQS'
         </body>
     </item>
     <item itemName="it0.0.1-002">
@@ -35,6 +35,15 @@
     </item>
     <item itemName="it0.0.1-003">
         <file>SQL/TABLES/APPUSER.sql</file>
+    </item>
+    <item itemName="it0.0.1-004">
+        <file>SQL/TABLES/AUDIT.sql</file>
+    </item>
+    <item itemName="it0.0.1-005">
+        <file>SQL/SEQUENCES/AUDIT_SEQ.sql</file>
+    </item>
+    <item itemName="it0.0.1-006">
+        <file>SQL/PACKAGES/PKG_SYS_UTL.sql</file>
     </item>
 
     <!-- Валюты и курсы валют -->

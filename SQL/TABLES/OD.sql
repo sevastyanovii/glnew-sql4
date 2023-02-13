@@ -21,3 +21,23 @@ COMMENT ON COLUMN od.lwdate_status IS 'Backday balance state';
 COMMENT ON COLUMN od.pdmod     IS 'Pd working mode';
 COMMENT ON COLUMN od.prc       IS 'Processing status';
 COMMENT ON COLUMN od.acsmode   IS 'Режим доступа (полный/ограниченный)';
+/*
+CURDATE       - текущий операционный день
+PHASE         - фаза опердня
+    ONLINE    - онлайн
+    PRE_COB   - выполняется COB BarsGL
+    COB       - закончился COB BarsGL, но новый ОД еще не открылся
+LWDATE        - предыдущий ОД (рабочий день, предшествующий ОД)
+LWD_STATUS    - баланс предыдущего дня (обычно весь день открыт)
+    OPEN      - открыт, backvalue за вчера ложатся во вчера
+    CLOSE     - закрыт, backvalue за вчера ложатся в сегодня
+PDMOD         - режим записи проводок (на проде BUFFER, на тесте удобней работать в DIRECT)
+    BUFFER    - проводки ложатся в GL_PD, попадают в PD после синхронизации или после СОВ
+    DIRECT    - проводки ложатся напрямую в PD
+PRC           - режим обработки проводок задачей EtlStructureMonitor
+    REQUIRED  - запрос остановки
+    STOPPED   - обработка остановлена
+    ALLOWED   - обработка разрешена
+    STARTED   - обработка запущена
+ASCMODE       - режим доступа, на тесте всегда FULL
+*/
