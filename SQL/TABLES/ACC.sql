@@ -29,6 +29,9 @@ CREATE TABLE acc
 	CONSTRAINT ch_acc_psav CHECK (psav IN ('0', '1'))
 );
 
+CREATE UNIQUE INDEX pk_acc_id ON acc (acc_id);
+CREATE UNIQUE INDEX idx_acc_bsaacid ON acc (bsaacid);
+
 COMMENT ON TABLE acc IS 'Банковский счет';
 COMMENT ON COLUMN acc.acc_id      IS 'ИД записи';
 COMMENT ON COLUMN acc.bsaacid     IS '20-значный номер счета';
@@ -52,7 +55,7 @@ COMMENT ON COLUMN acc.dtr         IS 'Дата регистрации запис
 COMMENT ON COLUMN acc.dtm         IS 'Дата модификации счета';
 COMMENT ON COLUMN acc.opentype    IS 'Тип операции для открытия счета';
 COMMENT ON COLUMN acc.gloid       IS 'Ссылка на ИД операции, созданной из AE, при обработке которой счет был открыт автоматически на основании ключа счета';
-COMMENT ON COLUMN acc.glo_dc      IS 'Принзак того, по какой стороне операции (Дт или Кт) был указан ключ счета, для которого был открыт данный счет';
+COMMENT ON COLUMN acc.glo_dc      IS 'Признак того, по какой стороне операции (Дт или Кт) был указан ключ счета, для которого был открыт данный счет';
 COMMENT ON COLUMN acc.rec_no      IS 'Порядковый номер записи';
 COMMENT ON COLUMN acc.inp_dt      IS 'Дата и время создания текущей записи';
 COMMENT ON COLUMN acc.inputter    IS 'Описание источника создания записи';

@@ -7,3 +7,4 @@ rollback.sql
 target
 /patch-*.sql
 /rollback-*.sql
+/SQL/DEVELOP/

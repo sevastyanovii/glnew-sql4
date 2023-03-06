@@ -2,3 +2,30 @@
 
 1. init_tabs.sql
 2. db_conf.sql
+
+CREATE USER GL2TDS IDENTIFIED BY gl2tds;
+GRANT CREATE SESSION TO gl2tds;
+GRANT CREATE ANY SYNONYM TO gl2tds;
+
+GRANT CREATE ANY TYPE TO glnew;
+GRANT EXECUTE ON dbms_aqadm TO glnew;
+GRANT EXECUTE ON dbms_aq TO glnew;
+GRANT MANAGE SCHEDULER TO glnew;
+GRANT CREATE ANY JOB TO glnew;
+GRANT EXECUTE ON dbms_lock TO glnew;
+GRANT EXECUTE ON SYS.DEFAULT_IN_MEMORY_JOB_CLASS TO glnew;
+GRANT EXECUTE ON dbms_pipe TO glnew;
+
+Создать группу для саппорта и дать права на изменение данных
+
+Замечания:
+В таблице BALTUR поле ACC_ID NUMBER(22,0)
+Максимальная дата 01.01.2100
+acc_id соотносится к BSAACID 1 к 1? - нет, счет может быть удален и открыт такой же
+нужен ли гибридный режим?
+почему ночью 2-3 раза включается режим ondemand на 15 мин и online часа на полтора?
+
+Предложение:
+не заполнять baltur.acc_id при обработке проводок, но заполнять в момент закрытия счета.
+
+сравнить параллельную и последовательную обработку проводок, штук 10000

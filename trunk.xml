@@ -11,7 +11,7 @@
 
     <item itemName="it0.0.1-001">
         <body>
-            DEFINE NEED_DROP = 'APPUSER,AUDIT,OD,CAL,CURRENCY,CURRATES,BNKBR,FCBR,CBCTP,DICTERM,SRCPST,CBBS,ACCTNAME,ACTPARM,FCGLACTYPE,DOCTYPE,CUSTOMER,CUSTOMER_H,CUSTLOAD,ACC,ACC_H,ACOPENRQS'
+            DEFINE NEED_DROP = 'APPUSER,AUDIT,OD,CAL,CURRENCY,CURRATES,BNKBR,FCBR,CBCTP,DICTERM,SRCPST,CBBS,ACCTNAME,ACTPARM,FCGLACTYPE,DOCTYPE,CUSTOMER,CUSTOMER_H,CUSTLOAD,ACC,ACC_H,ACOPENRQS,AE_IN_PST,OPERATION,PST,BALTUR,AUDIT_SEQ,AE_PST_SEQ,OPERATION_SEQ'
         </body>
     </item>
     <item itemName="it0.0.1-002">
@@ -20,13 +20,23 @@
             declare
                 c_tabs VARCHAR2(1000) := '&NEED_DROP';
             begin
+                -- drop tables
                 for nn in (select table_name t from user_tables where table_name in (
                     select regexp_substr (str, '[^,]+', 1, level) t
                       from (select c_tabs str from dual)
                            connect by level <= length(str) - length(replace(str, ',')) + 1))
                 loop
-                    DBMS_OUTPUT.put_line ('dropping '||nn.t);
+                    DBMS_OUTPUT.put_line ('dropping table '||nn.t);
                     EXECUTE IMMEDIATE 'DROP TABLE '||nn.t||' CASCADE CONSTRAINTS PURGE';
+                end loop;
+                -- drop sequences
+                for nn in (select table_name t from user_sequences where sequence_name in (
+                    select regexp_substr (str, '[^,]+', 1, level) t
+                      from (select c_tabs str from dual)
+                           connect by level <= length(str) - length(replace(str, ',')) + 1))
+                loop
+                    DBMS_OUTPUT.put_line ('dropping sequence '||nn.t);
+                    EXECUTE IMMEDIATE 'DROP SEQUENCE '||nn.t;
                 end loop;
             end;
             /
@@ -120,10 +130,10 @@
     <item itemName="it0.0.1-201">
         <file>SQL/TRIGGERS/trg_cbbs_bi.sql</file>
     </item>
-    <item itemName="it0.0.1-201">
+    <item itemName="it0.0.1-202">
         <file>SQL/TRIGGERS/trg_acc_h.sql</file>
     </item>
-    <item itemName="it0.0.1-201">
+    <item itemName="it0.0.1-203">
         <file>SQL/TRIGGERS/trg_customer_h.sql</file>
     </item>
 
@@ -167,6 +177,93 @@
     <!-- GL_Param_Tables_AC_CASA_0.01_20230202.xlsx -->
     <item itemName="it0.0.1-313">
         <file>SQL/DATA/cbbs_data.sql</file>
+    </item>
+
+    <!-- Îáðàáîòêà ñîáûòèé AE è ôîðìèðîâàíèå ïðîâîäîê GL -->
+    <item itemName="it0.0.1-401">
+        <file>SQL/PACKAGES/AQ_PKG_CONST.sql</file>
+    </item>
+    <item itemName="it0.0.1-402">
+        <file>SQL/OTHERS/AQ_TYPE.sql</file>
+    </item>
+    <item itemName="it0.0.1-403">
+        <file>SQL/OTHERS/AQ_QUEUE.sql</file>
+    </item>
+
+    <!-- sequences -->
+    <item itemName="it0.0.1-411">
+        <file>SQL/SEQUENCES/AE_PST_SEQ.sql</file>
+    </item>
+    <item itemName="it0.0.1-412">
+        <file>SQL/SEQUENCES/OPERATION_SEQ.sql</file>
+    </item>
+    <item itemName="it0.0.1-413">
+        <file>SQL/SEQUENCES/TRG_STATE_SEQ.sql</file>
+    </item>
+
+    <!--Òàáëèöû -->
+    <item itemName="it0.0.1-421">
+        <file>SQL/TABLES/AE_IN_PST.sql</file>
+    </item>
+    <item itemName="it0.0.1-422">
+        <file>SQL/TABLES/OPERATION.sql</file>
+    </item>
+    <item itemName="it0.0.1-423">
+        <file>SQL/TABLES/PST.sql</file>
+    </item>
+    <item itemName="it0.0.1-424">
+        <file>SQL/TABLES/BALTUR.sql</file>
+    </item>
+    <item itemName="it0.0.1-425">
+        <file>SQL/TABLES/AQPBR.sql</file>
+    </item>
+    <item itemName="it0.0.1-426">
+        <file>SQL/TABLES/BSACCLK.sql</file>
+    </item>
+    <item itemName="it0.0.1-427">
+        <file>SQL/TABLES/TRG_STATE.sql</file>
+    </item>
+
+    <!-- Triggers -->
+    <item itemName="it0.0.1-442">
+        <file>SQL/TRIGGERS/PSTAI.sql</file>
+    </item>
+    <item itemName="it0.0.1-443">
+        <file>SQL/TRIGGERS/PSTAU.sql</file>
+    </item>
+    <item itemName="it0.0.1-444">
+        <file>SQL/TRIGGERS/PSTAD.sql</file>
+    </item>
+
+    <!-- views -->
+    <item itemName="it0.0.1-451">
+        <file>SQL/VIEWS/V_BALMODE_TRG.sql</file>
+    </item>
+    <item itemName="it0.0.1-452">
+        <file>SQL/VIEWS/V_BALMODE_STATUS.sql</file>
+    </item>
+
+    <!-- packages -->
+    <item itemName="it0.0.1-461">
+        <file>SQL/PACKAGES/AQ_PKG.sql</file>
+    </item>
+    <item itemName="it0.0.1-462">
+        <file>SQL/TRIGGERS/AQ_TRG_PST.sql</file>
+    </item>
+    <item itemName="it0.0.1-463">
+        <file>SQL/PACKAGES/AQ_PKG_UTL.sql</file>
+    </item>
+    <item itemName="it0.0.1-464">
+        <file>SQL/PACKAGES/PKG_CURRENCY.sql</file>
+    </item>
+    <item itemName="it0.0.1-465">
+        <file>SQL/PROCEDURES/PROCESS_IN_PST.sql</file>
+    </item>
+    <item itemName="it0.0.1-466">
+        <file>SQL/PROCEDURES/PROCESS_AE.sql</file>
+    </item>
+    <item itemName="it0.0.1-467">
+        <file>SQL/OTHERS/AE_JOBS.sql</file>
     </item>
 
     <!--ÂÍÈÌÀÍÈÅ!!! ÏÐÈ ÑÁÎÐÊÅ ÐÅËÈÇÀ ÓÁÅÐÈ ÒÅÑÒÎÂÛÉ ÊÎÄ !!! -->

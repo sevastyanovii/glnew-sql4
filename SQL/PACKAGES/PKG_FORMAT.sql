@@ -1,38 +1,38 @@
-create or replace package PKG_FORMAT is
-  function msg_format3(a_template varchar2, a_replace1 varchar2) return varchar2;
-  function msg_format3(a_template varchar2, a_replace1 varchar2, a_replace2 varchar2) return varchar2;
-  function msg_format3(a_template varchar2, a_replace1 varchar2, a_replace2 varchar2, a_replace3 varchar2) return varchar2;
-  function msg_format3(a_template varchar2, a_replace1 varchar2, a_replace2 varchar2, a_replace3 varchar2, a_replace4 varchar2) return varchar2;
-  function msg_format3(a_template varchar2, a_replace1 varchar2, a_replace2 varchar2, a_replace3 varchar2, a_replace4 varchar2, a_replace5 varchar2) return varchar2;
-end PKG_FORMAT;
+CREATE OR REPLACE PACKAGE pkg_format IS
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2) RETURN VARCHAR2;
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2, a_replace2 VARCHAR2) RETURN VARCHAR2;
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2, a_replace2 VARCHAR2, a_replace3 VARCHAR2) RETURN VARCHAR2;
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2, a_replace2 VARCHAR2, a_replace3 VARCHAR2, a_replace4 VARCHAR2) RETURN VARCHAR2;
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2, a_replace2 VARCHAR2, a_replace3 VARCHAR2, a_replace4 VARCHAR2, a_replace5 VARCHAR2) RETURN VARCHAR2;
+END pkg_format;
 /
 
-create or replace package body PKG_FORMAT is
+CREATE OR REPLACE PACKAGE BODY pkg_format IS
 
-  function msg_format3(a_template varchar2, a_replace1 varchar2) return varchar2 is
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2) RETURN VARCHAR2 is
   begin
-    return replace(a_template, '{0}', a_replace1);
-  end msg_format3;
+    RETURN replace(a_template, '{0}', a_replace1);
+  END msg_format3;
 
-  function msg_format3(a_template varchar2, a_replace1 varchar2, a_replace2 varchar2) return varchar2 is
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2, a_replace2 VARCHAR2) RETURN VARCHAR2 is
   begin
-    return replace(replace(a_template, '{0}', a_replace1), '{1}', a_replace2);
-  end msg_format3;
+    RETURN replace(replace(a_template, '{0}', a_replace1), '{1}', a_replace2);
+  END msg_format3;
 
-  function msg_format3(a_template varchar2, a_replace1 varchar2, a_replace2 varchar2, a_replace3 varchar2) return varchar2 is
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2, a_replace2 VARCHAR2, a_replace3 VARCHAR2) RETURN VARCHAR2 is
   begin
-    return replace(replace(replace(a_template, '{0}', a_replace1), '{1}', a_replace2), '{2}', a_replace3);
-  end msg_format3;
+    RETURN replace(replace(replace(a_template, '{0}', a_replace1), '{1}', a_replace2), '{2}', a_replace3);
+  END msg_format3;
 
-  function msg_format3(a_template varchar2, a_replace1 varchar2, a_replace2 varchar2, a_replace3 varchar2, a_replace4 varchar2) return varchar2 is
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2, a_replace2 VARCHAR2, a_replace3 VARCHAR2, a_replace4 VARCHAR2) RETURN VARCHAR2 is
   begin
-    return replace(replace(replace(replace(a_template, '{0}', a_replace1), '{1}', a_replace2), '{2}', a_replace3), '{3}', a_replace4);
-  end msg_format3;
+    RETURN replace(replace(replace(replace(a_template, '{0}', a_replace1), '{1}', a_replace2), '{2}', a_replace3), '{3}', a_replace4);
+  END msg_format3;
 
-  function msg_format3(a_template varchar2, a_replace1 varchar2, a_replace2 varchar2, a_replace3 varchar2, a_replace4 varchar2, a_replace5 varchar2) return varchar2 is
+  FUNCTION msg_format3(a_template VARCHAR2, a_replace1 VARCHAR2, a_replace2 VARCHAR2, a_replace3 VARCHAR2, a_replace4 VARCHAR2, a_replace5 VARCHAR2) RETURN VARCHAR2 is
   begin
-    return replace(replace(replace(replace(replace(a_template, '{0}', a_replace1), '{1}', a_replace2), '{2}', a_replace3), '{3}', a_replace4), '{4}', a_replace5);
-  end msg_format3;
+    RETURN replace(replace(replace(replace(replace(a_template, '{0}', a_replace1), '{1}', a_replace2), '{2}', a_replace3), '{3}', a_replace4), '{4}', a_replace5);
+  END msg_format3;
 
-end PKG_FORMAT;
+END pkg_format;
 /
