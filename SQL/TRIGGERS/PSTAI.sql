@@ -2,17 +2,17 @@ CREATE OR REPLACE TRIGGER pstai AFTER INSERT ON pst
     REFERENCES new AS nrow FOR EACH ROW
 	WHEN (nrow.invisible <> '1')
 DECLARE
-    curdtac NUMBER(19, 0); -- Дебетовый оборот в валюте счета BSAACID
-    curdtbc NUMBER(19, 0); -- Дебетовый оборот в валюте локализации
-    curctac NUMBER(19, 0); -- Кредитовый оборот в валюте счета BSAACID
-    curctlc NUMBER(19, 0); -- Кредитовый оборот в валюте локализации
+    curdtac NUMBER(19, 0); -- Р”РµР±РµС‚РѕРІС‹Р№ РѕР±РѕСЂРѕС‚ РІ РІР°Р»СЋС‚Рµ СЃС‡РµС‚Р° BSAACID
+    curdtbc NUMBER(19, 0); -- Р”РµР±РµС‚РѕРІС‹Р№ РѕР±РѕСЂРѕС‚ РІ РІР°Р»СЋС‚Рµ Р»РѕРєР°Р»РёР·Р°С†РёРё
+    curctac NUMBER(19, 0); -- РљСЂРµРґРёС‚РѕРІС‹Р№ РѕР±РѕСЂРѕС‚ РІ РІР°Р»СЋС‚Рµ СЃС‡РµС‚Р° BSAACID
+    curctlc NUMBER(19, 0); -- РљСЂРµРґРёС‚РѕРІС‹Р№ РѕР±РѕСЂРѕС‚ РІ РІР°Р»СЋС‚Рµ Р»РѕРєР°Р»РёР·Р°С†РёРё
 
-    btdatl      DATE; -- Дата последней проводки по счету
+    btdatl      DATE; -- Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµР№ РїСЂРѕРІРѕРґРєРё РїРѕ СЃС‡РµС‚Сѓ
     btdat       DATE;
     btdatto     DATE;
     btbsaacid   CHAR(20);
-    btobac      NUMBER(19, 0); -- Остаток на начало дня DAT в валюте счета
-    btobbc      NUMBER(19, 0); -- Входящий остаток в валюте локализации
+    btobac      NUMBER(19, 0); -- РћСЃС‚Р°С‚РѕРє РЅР° РЅР°С‡Р°Р»Рѕ РґРЅСЏ DAT РІ РІР°Р»СЋС‚Рµ СЃС‡РµС‚Р°
+    btobbc      NUMBER(19, 0); -- Р’С…РѕРґСЏС‰РёР№ РѕСЃС‚Р°С‚РѕРє РІ РІР°Р»СЋС‚Рµ Р»РѕРєР°Р»РёР·Р°С†РёРё
 
     cur_acc_id  NUMBER(22, 0) := null;
 BEGIN
@@ -25,7 +25,7 @@ BEGIN
         curctac := 0; curctlc := 0;
     END IF;
 
-    -- ищем последний интервал баланса по счету
+    -- РёС‰РµРј РїРѕСЃР»РµРґРЅРёР№ РёРЅС‚РµСЂРІР°Р» Р±Р°Р»Р°РЅСЃР° РїРѕ СЃС‡РµС‚Сѓ
     BEGIN
         SELECT baltur.dat, baltur.datto, baltur.datl, baltur.bsaacid,
             (CASE WHEN baltur.dat = :nrow.pod THEN baltur.obac ELSE baltur.obac + (baltur.ctac + baltur.dtac) END),
@@ -41,12 +41,12 @@ BEGIN
     btdatl := :nrow.pod;
 
     IF btbsaacid IS null THEN
-        -- нет данных по остаткам - добавляем интервал
+        -- РЅРµС‚ РґР°РЅРЅС‹С… РїРѕ РѕСЃС‚Р°С‚РєР°Рј - РґРѕР±Р°РІР»СЏРµРј РёРЅС‚РµСЂРІР°Р»
         INSERT INTO baltur (dat, datto, datl, acc_id, bsaacid, dtac, dtbc, ctac, ctbc)
              VALUES (:nrow.pod, to_date('01.01.2100', 'DD.MM.YYYY'), btdatl, cur_acc_id,
                      :nrow.bsaacid, curdtac, curdtbc, curctac, curctlc);
     ELSIF btdat = :nrow.pod THEN
-        -- последний интервал баланса совпадает с днем обрабатываемой проводки - просто корректируем обороты
+        -- РїРѕСЃР»РµРґРЅРёР№ РёРЅС‚РµСЂРІР°Р» Р±Р°Р»Р°РЅСЃР° СЃРѕРІРїР°РґР°РµС‚ СЃ РґРЅРµРј РѕР±СЂР°Р±Р°С‚С‹РІР°РµРјРѕР№ РїСЂРѕРІРѕРґРєРё - РїСЂРѕСЃС‚Рѕ РєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РѕР±РѕСЂРѕС‚С‹
         UPDATE baltur
            SET
                datl = (CASE WHEN (baltur.datl IS null) OR baltur.datl < btdatl THEN btdatl ELSE baltur.datl END),
@@ -57,7 +57,7 @@ BEGIN
          WHERE baltur.dat = :nrow.pod AND baltur.datto = btdatto AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
 
     ELSIF btdat < :nrow.pod THEN
-        -- последний интервал начинается раньше даты проводки - меняем у него конечную дату и добавляем новый конечный интревал
+        -- РїРѕСЃР»РµРґРЅРёР№ РёРЅС‚РµСЂРІР°Р» РЅР°С‡РёРЅР°РµС‚СЃСЏ СЂР°РЅСЊС€Рµ РґР°С‚С‹ РїСЂРѕРІРѕРґРєРё - РјРµРЅСЏРµРј Сѓ РЅРµРіРѕ РєРѕРЅРµС‡РЅСѓСЋ РґР°С‚Сѓ Рё РґРѕР±Р°РІР»СЏРµРј РЅРѕРІС‹Р№ РєРѕРЅРµС‡РЅС‹Р№ РёРЅС‚СЂРµРІР°Р»
         UPDATE baltur
            SET datto = :nrow.pod - 1
          WHERE baltur.dat = btdat AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid AND baltur.datto = btdatto;
@@ -67,7 +67,7 @@ BEGIN
                     btobac, btobbc, curdtac, curdtbc, curctac, curctlc);
 
     ELSIF btdat > :nrow.pod THEN
-        -- последний интервал начинается позже даты проводки, ищем актуальный интервал для этой даты
+        -- РїРѕСЃР»РµРґРЅРёР№ РёРЅС‚РµСЂРІР°Р» РЅР°С‡РёРЅР°РµС‚СЃСЏ РїРѕР·Р¶Рµ РґР°С‚С‹ РїСЂРѕРІРѕРґРєРё, РёС‰РµРј Р°РєС‚СѓР°Р»СЊРЅС‹Р№ РёРЅС‚РµСЂРІР°Р» РґР»СЏ СЌС‚РѕР№ РґР°С‚С‹
         BEGIN
           SELECT baltur.dat, baltur.datto, baltur.datl, baltur.bsaacid,
                 (CASE WHEN baltur.dat = :nrow.pod THEN baltur.obac ELSE baltur.obac + (baltur.ctac + baltur.dtac) END),
@@ -81,8 +81,8 @@ BEGIN
         END;
 
         IF btbsaacid IS null THEN
-            -- не нашли подходящий интервал, значит дата проводки раньше начала ведения баланса по счету
-            -- создаем новый первый интервал баланса и корректируем остатки у всех последующих интервалов
+            -- РЅРµ РЅР°С€Р»Рё РїРѕРґС…РѕРґСЏС‰РёР№ РёРЅС‚РµСЂРІР°Р», Р·РЅР°С‡РёС‚ РґР°С‚Р° РїСЂРѕРІРѕРґРєРё СЂР°РЅСЊС€Рµ РЅР°С‡Р°Р»Р° РІРµРґРµРЅРёСЏ Р±Р°Р»Р°РЅСЃР° РїРѕ СЃС‡РµС‚Сѓ
+            -- СЃРѕР·РґР°РµРј РЅРѕРІС‹Р№ РїРµСЂРІС‹Р№ РёРЅС‚РµСЂРІР°Р» Р±Р°Р»Р°РЅСЃР° Рё РєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РѕСЃС‚Р°С‚РєРё Сѓ РІСЃРµС… РїРѕСЃР»РµРґСѓСЋС‰РёС… РёРЅС‚РµСЂРІР°Р»РѕРІ
             SELECT min(baltur.dat) INTO btdat FROM baltur WHERE baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
 
             IF btdat IS null THEN
@@ -102,7 +102,7 @@ BEGIN
              WHERE btdatto < baltur.datto AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
 
         ELSIF btdat < :nrow.pod THEN
-            -- дата проводки попадает в найденный интервал - делим его на два, и корректируем остатки у всех последующих интервалов
+            -- РґР°С‚Р° РїСЂРѕРІРѕРґРєРё РїРѕРїР°РґР°РµС‚ РІ РЅР°Р№РґРµРЅРЅС‹Р№ РёРЅС‚РµСЂРІР°Р» - РґРµР»РёРј РµРіРѕ РЅР° РґРІР°, Рё РєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РѕСЃС‚Р°С‚РєРё Сѓ РІСЃРµС… РїРѕСЃР»РµРґСѓСЋС‰РёС… РёРЅС‚РµСЂРІР°Р»РѕРІ
             UPDATE baltur SET datto = :nrow.pod - 1
              WHERE baltur.dat = btdat AND baltur.acc_id is null AND
                    baltur.bsaacid = :nrow.bsaacid AND baltur.datto = btdatto;
@@ -118,8 +118,8 @@ BEGIN
              WHERE btdatto < baltur.datto AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
 
         ELSIF btdat = :nrow.pod THEN
-            -- дата проводки совпадает с началом найденного интервала
-            -- корректируем остатки и обороты всех интервалов, начиная с этого
+            -- РґР°С‚Р° РїСЂРѕРІРѕРґРєРё СЃРѕРІРїР°РґР°РµС‚ СЃ РЅР°С‡Р°Р»РѕРј РЅР°Р№РґРµРЅРЅРѕРіРѕ РёРЅС‚РµСЂРІР°Р»Р°
+            -- РєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РѕСЃС‚Р°С‚РєРё Рё РѕР±РѕСЂРѕС‚С‹ РІСЃРµС… РёРЅС‚РµСЂРІР°Р»РѕРІ, РЅР°С‡РёРЅР°СЏ СЃ СЌС‚РѕРіРѕ
             UPDATE baltur
                SET
                    datl = (CASE WHEN (baltur.datl IS null) OR baltur.datl < btdatl THEN btdatl ELSE baltur.datl END),

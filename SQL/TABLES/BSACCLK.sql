@@ -5,7 +5,7 @@ CREATE TABLE bsacclk (
 	CONSTRAINT bsacclk_pk PRIMARY KEY(bsaacid)
 );
 
-COMMENT ON TABLE bsacclk IS  'Таблица блокировки счетов при корректировке остатков';
-COMMENT ON COLUMN bsacclk.bsaacid    IS '20-значный номер счета';
-COMMENT ON COLUMN bsacclk.cre_date   IS 'Дата создания записи';
-COMMENT ON COLUMN bsacclk.upd_date   IS 'Дата обновления записи';
+COMMENT ON TABLE bsacclk IS  'РўР°Р±Р»РёС†Р° Р±Р»РѕРєРёСЂРѕРІРєРё СЃС‡РµС‚РѕРІ РїСЂРё РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєРµ РѕСЃС‚Р°С‚РєРѕРІ';
+COMMENT ON COLUMN bsacclk.bsaacid    IS '20-Р·РЅР°С‡РЅС‹Р№ РЅРѕРјРµСЂ СЃС‡РµС‚Р°';
+COMMENT ON COLUMN bsacclk.cre_date   IS 'Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ Р·Р°РїРёСЃРё';
+COMMENT ON COLUMN bsacclk.upd_date   IS 'Р”Р°С‚Р° РѕР±РЅРѕРІР»РµРЅРёСЏ Р·Р°РїРёСЃРё';

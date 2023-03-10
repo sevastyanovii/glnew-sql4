@@ -7,6 +7,27 @@ CREATE USER GL2TDS IDENTIFIED BY gl2tds;
 GRANT CREATE SESSION TO gl2tds;
 GRANT CREATE ANY SYNONYM TO gl2tds;
 
+
+CREATE USER glnew01 IDENTIFIED BY glnew01;
+GRANT CREATE SESSION TO glnew01;
+GRANT CREATE TABLE TO glnew01;
+GRANT CREATE VIEW TO glnew01;
+GRANT CREATE ANY TRIGGER TO glnew01;
+GRANT CREATE ANY PROCEDURE TO glnew01;
+GRANT CREATE SEQUENCE TO glnew01;
+GRANT CREATE SYNONYM TO glnew01;
+GRANT CREATE ANY TYPE TO glnew01;
+GRANT EXECUTE ON dbms_aqadm TO glnew01;
+GRANT EXECUTE ON dbms_aq TO glnew01;
+GRANT MANAGE SCHEDULER TO glnew01;
+GRANT CREATE ANY JOB TO glnew01;
+GRANT EXECUTE ON dbms_lock TO glnew01;
+GRANT EXECUTE ON SYS.DEFAULT_IN_MEMORY_JOB_CLASS TO glnew01;
+GRANT EXECUTE ON dbms_pipe TO glnew01;
+ALTER USER glnew01 quota 1000M on USERS;
+GRANT RESUMABLE TO glnew01;
+
+
 GRANT CREATE ANY TYPE TO glnew;
 GRANT EXECUTE ON dbms_aqadm TO glnew;
 GRANT EXECUTE ON dbms_aq TO glnew;
@@ -22,10 +43,7 @@ GRANT EXECUTE ON dbms_pipe TO glnew;
 В таблице BALTUR поле ACC_ID NUMBER(22,0)
 Максимальная дата 01.01.2100
 acc_id соотносится к BSAACID 1 к 1? - нет, счет может быть удален и открыт такой же
-нужен ли гибридный режим?
 почему ночью 2-3 раза включается режим ondemand на 15 мин и online часа на полтора?
 
 Предложение:
 не заполнять baltur.acc_id при обработке проводок, но заполнять в момент закрытия счета.
-
-сравнить параллельную и последовательную обработку проводок, штук 10000

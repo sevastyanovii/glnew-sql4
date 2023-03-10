@@ -1,12 +1,13 @@
 CREATE TABLE acc
 (
 	acc_id      NUMBER(22,0) GENERATED ALWAYS AS IDENTITY (NOCACHE) PRIMARY KEY,
-	bsaacid     VARCHAR2(20 CHAR) NOT NULL UNIQUE,
+	bsaacid     VARCHAR2(20 CHAR) NOT NULL,
 	bank_id     CHAR(5),
 	branch      CHAR(3) NOT NULL,
 	ccy         CHAR(3) NOT NULL,
 	custid      CHAR(8) NOT NULL,
-	acctype     VARCHAR2(10 CHAR) NOT NULL,
+	acctype     VARCHAR2(10 CHAR),
+	ac_class	VARCHAR(6 CHAR),
 	ctype       CHAR(2),
 	term        CHAR(2),
 	gl_seq      VARCHAR2(10 CHAR),
@@ -25,11 +26,9 @@ CREATE TABLE acc
 	glo_dc      CHAR(1),
 	rec_no      NUMBER DEFAULT 1 NOT NULL,
 	inp_dt      TIMESTAMP DEFAULT SYSTIMESTAMP,
-	inputter    VARCHAR2(35 CHAR),
 	CONSTRAINT ch_acc_psav CHECK (psav IN ('0', '1'))
 );
 
-CREATE UNIQUE INDEX pk_acc_id ON acc (acc_id);
 CREATE UNIQUE INDEX idx_acc_bsaacid ON acc (bsaacid);
 
 COMMENT ON TABLE acc IS 'Банковский счет';
@@ -40,6 +39,7 @@ COMMENT ON COLUMN acc.branch      IS 'Бранч  FC, в котором откр
 COMMENT ON COLUMN acc.ccy         IS 'Валюта';
 COMMENT ON COLUMN acc.custid      IS 'Код клиента';
 COMMENT ON COLUMN acc.acctype     IS 'Accounting Type';
+COMMENT ON COLUMN acc.ac_class    IS 'Account Class';
 COMMENT ON COLUMN acc.ctype       IS 'Тип клиента';
 COMMENT ON COLUMN acc.term        IS 'Код срока';
 COMMENT ON COLUMN acc.gl_seq      IS 'Порядковый номер счета в AE';
@@ -58,4 +58,3 @@ COMMENT ON COLUMN acc.gloid       IS 'Ссылка на ИД операции, �
 COMMENT ON COLUMN acc.glo_dc      IS 'Признак того, по какой стороне операции (Дт или Кт) был указан ключ счета, для которого был открыт данный счет';
 COMMENT ON COLUMN acc.rec_no      IS 'Порядковый номер записи';
 COMMENT ON COLUMN acc.inp_dt      IS 'Дата и время создания текущей записи';
-COMMENT ON COLUMN acc.inputter    IS 'Описание источника создания записи';

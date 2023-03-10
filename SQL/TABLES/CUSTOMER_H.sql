@@ -19,7 +19,6 @@ CREATE TABLE customer_h
     bnk_br   CHAR(1) NOT NULL,
     rec_no   NUMBER NOT NULL,
     inp_dt   TIMESTAMP NOT NULL,
-    inputter VARCHAR2(35 CHAR),
     --
     ts          TIMESTAMP NOT NULL,
     chg_vector  CHAR(1) NOT NULL
@@ -48,6 +47,5 @@ COMMENT ON COLUMN customer_h.fcstatus   IS 'Статус FlexCube';
 COMMENT ON COLUMN customer_h.bnk_br     IS 'Филиал (Признак филиала)';
 COMMENT ON COLUMN customer_h.rec_no     IS 'Порядковый номер записи';
 COMMENT ON COLUMN customer_h.inp_dt     IS 'Дата и время создания текущей записи';
-COMMENT ON COLUMN customer_h.inputter   IS 'Описание источника создания записи';
 COMMENT ON COLUMN customer_h.ts         IS 'Момент изменения/добавления родительской записи в таблице acc';
 COMMENT ON COLUMN customer_h.chg_vector IS 'Тип изменения родительской записи в таблице acc (I/U)';

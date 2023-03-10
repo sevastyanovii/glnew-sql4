@@ -21,10 +21,10 @@ CREATE TABLE custload
     birthday    DATE,
     pinfl       VARCHAR2(14 CHAR),
     res         CHAR(1) check (res in ('Y', 'N')),
-    fcstatus    VARCHAR2(10 CHAR),
+    fcstatus    VARCHAR2(2),
     bnk_br      CHAR(1) check (bnk_br in ('Y', 'N')),
-    res_stat    VARCHAR2(10 CHAR) check (res_stat in ('INSERT','UPDATE')),
-    errcode     VARCHAR2(4 CHAR),
+    res_stat    VARCHAR2(10) check (res_stat in ('INSERT','UPDATE')),
+    errcode     VARCHAR2(4),
     errdescr    VARCHAR2(1024 CHAR),
     constraint ch_custload_status check (status in ('LOAD','VALIDATED','MAPPED','PROCESSED','ERR_VAL','ERR_MAP'))
 );

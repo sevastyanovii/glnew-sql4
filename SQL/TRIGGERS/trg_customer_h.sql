@@ -22,7 +22,6 @@ begin
     l_row.bnk_br  := :old.bnk_br;
     l_row.rec_no  := :old.rec_no;
     l_row.inp_dt  := :old.inp_dt;
-    l_row.inputter:= :old.inputter;
 
     l_row.chg_vector := 'U';
     :new.rec_no := :old.rec_no + 1;

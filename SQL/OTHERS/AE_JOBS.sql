@@ -4,7 +4,7 @@ BEGIN
 		'STORED_PROCEDURE',      -- program_type
 		'process_ae_from_pipe',  -- program_action
 		0,                       -- number_of_arguments
-		true,                    -- enabled);
+		true);                   -- enabled
 END;
 /
 
@@ -16,7 +16,6 @@ BEGIN
 		start_date => systimestamp,
 		repeat_interval => 'freq=secondly;interval=1',
 		end_date   => systimestamp + 1,
-		store_output => false,
 		enabled    => true);
 	dbms_scheduler.create_job(
 		job_name   => aq_pkg_const.get_balance_queue_listnr_prfx()||'02',
@@ -33,7 +32,6 @@ BEGIN
 		start_date => systimestamp,
 		repeat_interval => 'freq=minutely;interval=10',
 		end_date   => systimestamp + 1,
-		store_output => false,
 		enabled    => true);
 END;
 /
@@ -46,7 +44,6 @@ BEGIN
 		start_date => systimestamp,
 		repeat_interval => 'freq=secondly;interval=15',
 		end_date   => systimestamp + 1,
-		store_output => false,
 		enabled    => true);
 END;
 /

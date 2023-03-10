@@ -104,13 +104,3 @@ EXCEPTION
 			sqlerrm, dbms_utility.format_error_backtrace);
 END;
 /
-
-BEGIN
-	dbms_scheduler.create_program(
-		'prg_prc_ae_from_pipe',  -- program_name
-		'STORED_PROCEDURE',      -- program_type
-		'process_ae_from_pipe',  -- program_action
-		0,                       -- number_of_arguments
-		true,                    -- enabled);
-END;
-/

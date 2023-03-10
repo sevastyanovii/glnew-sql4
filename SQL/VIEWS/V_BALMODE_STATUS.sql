@@ -1,14 +1,14 @@
--- представление используется для вычисления текущего режима расчета остатков
+-- РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ С‚РµРєСѓС‰РµРіРѕ СЂРµР¶РёРјР° СЂР°СЃС‡РµС‚Р° РѕСЃС‚Р°С‚РєРѕРІ
 CREATE OR REPLACE VIEW v_balmode_status AS
 SELECT current_form current_mode
        ,
-       /**проверка кол-ва включенных триггеров в соответствие с режимом*/
+       /**РїСЂРѕРІРµСЂРєР° РєРѕР»-РІР° РІРєР»СЋС‡РµРЅРЅС‹С… С‚СЂРёРіРіРµСЂРѕРІ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ СЃ СЂРµР¶РёРјРѕРј*/
        CASE WHEN current_form = aq_pkg_const.get_const_trigger_form_gibrid THEN
                 CASE WHEN cnt_trg = 1 THEN 'OK' ELSE 'ERROR' END
             WHEN current_form = aq_pkg_const.get_const_trigger_form_online THEN
                 CASE WHEN cnt_trg = 3 THEN 'OK' ELSE 'ERROR' END
        END mode_status,
-       /**Внимание!!! не должны быть отновременно включены режим ONLINE и GIBRID*/
+       /**Р’РЅРёРјР°РЅРёРµ!!! РЅРµ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РѕС‚РЅРѕРІСЂРµРјРµРЅРЅРѕ РІРєР»СЋС‡РµРЅС‹ СЂРµР¶РёРј ONLINE Рё GIBRID*/
        decode(cnt_enabled_modes, 1, 'OK', 'ERROR') mode_status_cnt
     FROM (
         SELECT count(1) cnt_trg, form current_form

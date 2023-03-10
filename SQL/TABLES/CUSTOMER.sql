@@ -19,8 +19,7 @@ CREATE TABLE customer
     fcstatus VARCHAR2(10 CHAR) NOT NULL,
     bnk_br   CHAR(1) NOT NULL,
     rec_no   NUMBER DEFAULT 1 NOT NULL,
-    inp_dt   TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
-    inputter VARCHAR2(35 CHAR)
+    inp_dt   TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
 );
 
 COMMENT ON TABLE customer is 'Клиенты';
@@ -44,4 +43,3 @@ COMMENT ON COLUMN customer.fcstatus is 'Статус FlexCube';
 COMMENT ON COLUMN customer.bnk_br   is 'Филиал (Признак филиала)';
 COMMENT ON COLUMN customer.rec_no   is 'Порядковый номер записи';
 COMMENT ON COLUMN customer.inp_dt   is 'Дата и время создания текущей записи';
-COMMENT ON COLUMN customer.inputter is 'Описание источника создания записи';

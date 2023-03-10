@@ -47,7 +47,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg IS
             curctac := 0; curctbc := 0;
         END IF;
 
-        -- ищем последний интервал баланса по счету
+        -- РёС‰РµРј РїРѕСЃР»РµРґРЅРёР№ РёРЅС‚РµСЂРІР°Р» Р±Р°Р»Р°РЅСЃР° РїРѕ СЃС‡РµС‚Сѓ
         BEGIN
             SELECT baltur.dat, baltur.datto, baltur.datl, baltur.bsaacid,
                 (CASE WHEN baltur.dat = a_new_pod THEN baltur.obac ELSE baltur.obac + (baltur.ctac + baltur.dtac) END),
@@ -61,12 +61,12 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg IS
         END;
 
         IF btbsaacid IS NULL THEN
-            -- нет данных по остаткам - добавляем интервал
+            -- РЅРµС‚ РґР°РЅРЅС‹С… РїРѕ РѕСЃС‚Р°С‚РєР°Рј - РґРѕР±Р°РІР»СЏРµРј РёРЅС‚РµСЂРІР°Р»
             INSERT INTO baltur (dat, datto, datl, acc_id, bsaacid, dtac, dtbc, ctac, ctbc)
             VALUES (a_new_pod, to_date('01.01.2100', 'DD.MM.YYYY'), btdatl, null, a_new_bsaacid, curdtac, curdtbc, curctac, curctbc);
 
         ELSIF btdat = a_new_pod THEN
-            -- выбрана запись с бансом 2100г равным дате проводки
+            -- РІС‹Р±СЂР°РЅР° Р·Р°РїРёСЃСЊ СЃ Р±Р°РЅСЃРѕРј 2100Рі СЂР°РІРЅС‹Рј РґР°С‚Рµ РїСЂРѕРІРѕРґРєРё
             UPDATE baltur
             SET
                 datl = (CASE WHEN (baltur.datl IS null) OR baltur.datl < btdatl THEN btdatl ELSE baltur.datl END),
@@ -77,7 +77,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg IS
             WHERE baltur.dat = a_new_pod AND baltur.datto = btdatto AND baltur.acc_id is null AND baltur.bsaacid = a_new_bsaacid;
 
         ELSIF btdat < a_new_pod THEN
-            -- дата баланса 2100г меньше даты проводки
+            -- РґР°С‚Р° Р±Р°Р»Р°РЅСЃР° 2100Рі РјРµРЅСЊС€Рµ РґР°С‚С‹ РїСЂРѕРІРѕРґРєРё
             UPDATE baltur
                 SET datto = a_new_pod - 1
             WHERE baltur.dat = btdat AND baltur.acc_id is null AND baltur.bsaacid = a_new_bsaacid AND baltur.datto = btdatto;
@@ -86,7 +86,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg IS
             VALUES (a_new_pod, btdatto, btdatl, null, a_new_bsaacid, btobac, btobbc, curdtac, curdtbc, curctac, curctbc);
 
         ELSIF btdat > a_new_pod THEN
-            -- дата баланса 2100г больше даты проводки, ищем актуальный интервал для a_new_pod
+            -- РґР°С‚Р° Р±Р°Р»Р°РЅСЃР° 2100Рі Р±РѕР»СЊС€Рµ РґР°С‚С‹ РїСЂРѕРІРѕРґРєРё, РёС‰РµРј Р°РєС‚СѓР°Р»СЊРЅС‹Р№ РёРЅС‚РµСЂРІР°Р» РґР»СЏ a_new_pod
             BEGIN
               SELECT baltur.dat, baltur.datto, baltur.datl, baltur.bsaacid,
                     (CASE WHEN baltur.dat = a_new_pod THEN baltur.obac ELSE baltur.obac + (baltur.ctac + baltur.dtac) END),
@@ -347,7 +347,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg IS
     END;
 
     /**
-        признак нужно ли проводить пересчет остатков синхронно или через очередь
+        РїСЂРёР·РЅР°Рє РЅСѓР¶РЅРѕ Р»Рё РїСЂРѕРІРѕРґРёС‚СЊ РїРµСЂРµСЃС‡РµС‚ РѕСЃС‚Р°С‚РєРѕРІ СЃРёРЅС…СЂРѕРЅРЅРѕ РёР»Рё С‡РµСЂРµР· РѕС‡РµСЂРµРґСЊ
         returning true - yes, else false
     */
     FUNCTION is_syncbalcalc(a_pd_pbr CHAR) RETURN BOOLEAN RESULT_CACHE IS
@@ -525,7 +525,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg IS
             RAISE;
     END process_msg;
 
-    ----- проверка наличия данных по счету в очереди -----
+    ----- РїСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РґР°РЅРЅС‹С… РїРѕ СЃС‡РµС‚Сѓ РІ РѕС‡РµСЂРµРґРё -----
     FUNCTION check_queue(a_bsaacid VARCHAR2, a_field_name VARCHAR2, a_hint VARCHAR2) RETURN BOOLEAN IS
         l_result NUMBER;
         l_curdate DATE;
@@ -540,13 +540,13 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg IS
     EXCEPTION WHEN NO_DATA_FOUND THEN RETURN FALSE;
     END check_queue;
 
-    ----- проверка наличия данных по счету в очереди -----
+    ----- РїСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РґР°РЅРЅС‹С… РїРѕ СЃС‡РµС‚Сѓ РІ РѕС‡РµСЂРµРґРё -----
     FUNCTION check_queue_newacc(a_bsaacid VARCHAR2) RETURN CHAR IS
     BEGIN
         RETURN CASE WHEN check_queue(a_bsaacid, 'NEW_BSAACID', '/*+ INDEX (Q IDX_BALQUEUE_NEWBSA) */') THEN '1' ELSE '0' END;
     END check_queue_newacc;
 
-    ----- проверка наличия данных по счету в очереди -----
+    ----- РїСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РґР°РЅРЅС‹С… РїРѕ СЃС‡РµС‚Сѓ РІ РѕС‡РµСЂРµРґРё -----
     FUNCTION check_queue_oldacc(a_bsaacid VARCHAR2) RETURN CHAR IS
     BEGIN
         RETURN CASE WHEN check_queue(a_bsaacid, 'OLD_BSAACID', '/*+ INDEX (Q IDX_BALQUEUE_OLDBSA) */') THEN '1' ELSE '0' END;

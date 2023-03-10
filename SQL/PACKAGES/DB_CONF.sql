@@ -40,7 +40,10 @@ create or replace PACKAGE DB_CONF IS
 
     PROCEDURE INIT_CONNECTION_NLS;
 
-    PROCEDURE DROPJOB_IF_EXISTS(A_JOBNAME VARCHAR2);
+    PROCEDURE drop_job_if_exists(a_jobname VARCHAR2);
+    PROCEDURE drop_program_if_exists(a_progname VARCHAR2);
+    PROCEDURE drop_queue_if_exists(a_queuename VARCHAR2);
+    PROCEDURE drop_type_if_exists(a_typename VARCHAR2);
 
     function job_info(h1 NUMBER) return char;
 
@@ -511,14 +514,49 @@ create or replace PACKAGE BODY DB_CONF IS
        -- It's not need, apply the settings of DB -- EXECUTE IMMEDIATE 'ALTER SESSION SET SESSION_CACHED_CURSORS = 100';
     END;
 
-    PROCEDURE DROPJOB_IF_EXISTS(A_JOBNAME VARCHAR2) IS
-        L_CNT INTEGER;
+    PROCEDURE drop_job_if_exists(a_jobname VARCHAR2) IS
+        l_cnt INTEGER;
     BEGIN
-        SELECT COUNT(1) INTO L_CNT FROM USER_SCHEDULER_JOBS WHERE JOB_NAME = A_JOBNAME;
-        IF (L_CNT > 0) THEN
-            DBMS_SCHEDULER.DROP_JOB(JOB_NAME => A_JOBNAME);
+        SELECT count(1) INTO l_cnt FROM user_scheduler_jobs WHERE job_name = a_jobname;
+        IF (l_cnt > 0) THEN
+            dbms_scheduler.drop_job(job_name => a_jobname);
         END IF;
-    END DROPJOB_IF_EXISTS;
+    END drop_job_if_exists;
+
+    PROCEDURE drop_program_if_exists(a_progname VARCHAR2) IS
+        l_cnt INTEGER;
+    BEGIN
+        SELECT count(1) INTO l_cnt FROM user_scheduler_programs WHERE program_name = a_progname;
+        IF (l_cnt > 0) THEN
+            dbms_scheduler.drop_program(program_name => a_progname);
+        END IF;
+    END drop_program_if_exists;
+
+    PROCEDURE drop_queue_if_exists(a_queuename VARCHAR2) IS
+        l_cnt INTEGER;
+        l_queue_tab_name VARCHAR2(64);
+    BEGIN
+        SELECT count(1) INTO l_cnt FROM user_queues WHERE name = a_queuename;
+        IF (l_cnt > 0) THEN
+            SELECT queue_table INTO l_queue_tab_name FROM user_queues WHERE name = a_queuename;
+            dbms_aqadm.stop_queue(queue_name => a_queuename);
+            dbms_aqadm.drop_queue(queue_name => a_queuename);
+
+            SELECT count(1) INTO l_cnt FROM user_queue_tables WHERE queue_table = l_queue_tab_name;
+            IF (l_cnt > 0) THEN
+                dbms_aqadm.drop_queue_table(queue_table => l_queue_tab_name);
+            END IF;
+        END IF;
+    END drop_queue_if_exists;
+
+    PROCEDURE drop_type_if_exists(a_typename VARCHAR2) IS
+        l_cnt INTEGER;
+    BEGIN
+        SELECT count(1) INTO l_cnt FROM user_types WHERE type_name = a_typename;
+        IF (l_cnt > 0) THEN
+            EXECUTE IMMEDIATE 'DROP TYPE '||a_typename;
+        END IF;
+    END drop_type_if_exists;
 
 END DB_CONF;
 /

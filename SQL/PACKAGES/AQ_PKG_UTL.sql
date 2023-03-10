@@ -4,34 +4,34 @@ CREATE OR REPLACE PACKAGE aq_pkg_utl IS
     C_LOG_CODE_BALANCE_MODE CONSTANT VARCHAR2(12) := 'BalanceMode';
 
     /**
-        гибридный режим пересчета остатков (часть асинхронно, часть синхронно на основе PST.PBR см AQPBR)
+        РіРёР±СЂРёРґРЅС‹Р№ СЂРµР¶РёРј РїРµСЂРµСЃС‡РµС‚Р° РѕСЃС‚Р°С‚РєРѕРІ (С‡Р°СЃС‚СЊ Р°СЃРёРЅС…СЂРѕРЅРЅРѕ, С‡Р°СЃС‚СЊ СЃРёРЅС…СЂРѕРЅРЅРѕ РЅР° РѕСЃРЅРѕРІРµ PST.PBR СЃРј AQPBR)
     */
     PROCEDURE start_gibrid_mode;
 
     /**
-        режим прямого пересчета остатков (LEGACY)
+        СЂРµР¶РёРј РїСЂСЏРјРѕРіРѕ РїРµСЂРµСЃС‡РµС‚Р° РѕСЃС‚Р°С‚РєРѕРІ (LEGACY)
     */
     PROCEDURE start_online_mode;
 
     /**
-        режим пересчета остатков по требованию (все триггера отключены, таблица PST не журналируется для репликации)
+        СЂРµР¶РёРј РїРµСЂРµСЃС‡РµС‚Р° РѕСЃС‚Р°С‚РєРѕРІ РїРѕ С‚СЂРµР±РѕРІР°РЅРёСЋ (РІСЃРµ С‚СЂРёРіРіРµСЂР° РѕС‚РєР»СЋС‡РµРЅС‹, С‚Р°Р±Р»РёС†Р° PST РЅРµ Р¶СѓСЂРЅР°Р»РёСЂСѓРµС‚СЃСЏ РґР»СЏ СЂРµРїР»РёРєР°С†РёРё)
     */
     PROCEDURE start_ondemand_mode;
 
     FUNCTION comma_to_array(A_NAMES_STRING VARCHAR2, A_DELIM VARCHAR2) RETURN DBMS_UTILITY.LNAME_ARRAY;
 
     /**
-        вычисление текущего режима пересчета остатков. В случае некорректной установки режима генерирует ошибку.
+        РІС‹С‡РёСЃР»РµРЅРёРµ С‚РµРєСѓС‰РµРіРѕ СЂРµР¶РёРјР° РїРµСЂРµСЃС‡РµС‚Р° РѕСЃС‚Р°С‚РєРѕРІ. Р’ СЃР»СѓС‡Р°Рµ РЅРµРєРѕСЂСЂРµРєС‚РЅРѕР№ СѓСЃС‚Р°РЅРѕРІРєРё СЂРµР¶РёРјР° РіРµРЅРµСЂРёСЂСѓРµС‚ РѕС€РёР±РєСѓ.
     */
     FUNCTION get_current_bal_state RETURN VARCHAR2;
 
     /**
-        проверка состояния очереди. при наличии ошибок останавливает обработку и закрывает очередь на прием сообщений
+        РїСЂРѕРІРµСЂРєР° СЃРѕСЃС‚РѕСЏРЅРёСЏ РѕС‡РµСЂРµРґРё. РїСЂРё РЅР°Р»РёС‡РёРё РѕС€РёР±РѕРє РѕСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РѕР±СЂР°Р±РѕС‚РєСѓ Рё Р·Р°РєСЂС‹РІР°РµС‚ РѕС‡РµСЂРµРґСЊ РЅР° РїСЂРёРµРј СЃРѕРѕР±С‰РµРЅРёР№
     */
     PROCEDURE check_error_queue;
 
     /**
-        восстановление последнего состояния триггеров на PST перед включением режима ONDEMAND
+        РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РїРѕСЃР»РµРґРЅРµРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ С‚СЂРёРіРіРµСЂРѕРІ РЅР° PST РїРµСЂРµРґ РІРєР»СЋС‡РµРЅРёРµРј СЂРµР¶РёРјР° ONDEMAND
     */
     PROCEDURE restore_pst_triggers;
 
@@ -86,8 +86,8 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
 
         PROCEDURE raise_ex(a_type VARCHAR2, a_found NUMBER, a_expected NUMBER) IS
         BEGIN
-            RAISE_APPLICATION_ERROR(-20000, 'Количество триггеров типа '||a_type||' '||to_char(a_found)
-                ||' не соответствует ожидаемому '||a_expected);
+            RAISE_APPLICATION_ERROR(-20000, 'РљРѕР»РёС‡РµСЃС‚РІРѕ С‚СЂРёРіРіРµСЂРѕРІ С‚РёРїР° '||a_type||' '||to_char(a_found)
+                ||' РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РѕР¶РёРґР°РµРјРѕРјСѓ '||a_expected);
         END raise_ex;
     BEGIN
         SELECT sum(CASE WHEN form = aq_pkg_const.get_const_trigger_form_online THEN 1 ELSE 0 END) onl,
@@ -115,8 +115,8 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
                 queue_name => aq_pkg_const.c_normal_queue_name,
                 enqueue    => true,
                 dequeue    => true);
-            pkg_sys_utl.log_audit_warn(C_LOG_CODE_ASYNC, 'Очередь '||aq_pkg_const.c_normal_queue_name
-                ||' открыта на прием сообщений');
+            pkg_sys_utl.log_audit_warn(C_LOG_CODE_ASYNC, 'РћС‡РµСЂРµРґСЊ '||aq_pkg_const.c_normal_queue_name
+                ||' РѕС‚РєСЂС‹С‚Р° РЅР° РїСЂРёРµРј СЃРѕРѕР±С‰РµРЅРёР№');
         END;
 
     BEGIN
@@ -133,7 +133,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
         END LOOP;
         start_queue();
         COMMIT;
-        pkg_sys_utl.log_audit_info(c_log_code_balance_mode, 'Включен режим пересчета остатков: GIBRID');
+        pkg_sys_utl.log_audit_info(c_log_code_balance_mode, 'Р’РєР»СЋС‡РµРЅ СЂРµР¶РёРј РїРµСЂРµСЃС‡РµС‚Р° РѕСЃС‚Р°С‚РєРѕРІ: GIBRID');
     END start_gibrid_mode;
 
     PROCEDURE start_online_mode IS
@@ -153,7 +153,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
             END IF;
         END LOOP;
         COMMIT;
-        pkg_sys_utl.log_audit_info(c_log_code_balance_mode, 'Включен режим пересчета остатков: ONLINE');
+        pkg_sys_utl.log_audit_info(c_log_code_balance_mode, 'Р’РєР»СЋС‡РµРЅ СЂРµР¶РёРј РїРµСЂРµСЃС‡РµС‚Р° РѕСЃС‚Р°С‚РєРѕРІ: ONLINE');
     END start_online_mode;
 
     PROCEDURE start_ondemand_mode IS
@@ -169,7 +169,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
             END IF;
         END LOOP;
         COMMIT;
-        pkg_sys_utl.log_audit_info(c_log_code_balance_mode, 'Включен режим пересчета остатков: ONDEMAND');
+        pkg_sys_utl.log_audit_info(c_log_code_balance_mode, 'Р’РєР»СЋС‡РµРЅ СЂРµР¶РёРј РїРµСЂРµСЃС‡РµС‚Р° РѕСЃС‚Р°С‚РєРѕРІ: ONDEMAND');
     END start_ondemand_mode;
 
     PROCEDURE restore_pst_triggers IS
@@ -180,9 +180,9 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
                    ) WHERE rn = 1) LOOP
             IF (nn.trigger_state = aq_pkg_const.c_trigger_state_enabled) THEN
                 switch_trigger_on(nn.trigger_name);
-                pkg_sys_utl.log_audit_info('SwitchTrigger', 'Включен триггер "'||nn.trigger_name
-                    ||'" при восстановленим состояния на момет последнего включения "'
-                    ||to_char(nn.ts, 'YYYY-MM-DD HH24:MI:SS.FF6')||'" режима ONDEMAND');
+                pkg_sys_utl.log_audit_info('SwitchTrigger', 'Р’РєР»СЋС‡РµРЅ С‚СЂРёРіРіРµСЂ "'||nn.trigger_name
+                    ||'" РїСЂРё РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРј СЃРѕСЃС‚РѕСЏРЅРёСЏ РЅР° РјРѕРјРµС‚ РїРѕСЃР»РµРґРЅРµРіРѕ РІРєР»СЋС‡РµРЅРёСЏ "'
+                    ||to_char(nn.ts, 'YYYY-MM-DD HH24:MI:SS.FF6')||'" СЂРµР¶РёРјР° ONDEMAND');
             END IF;
         END LOOP;
 
@@ -208,7 +208,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
                 AND l_res.mode_status = 'OK' AND l_res.mode_status_cnt = 'OK') THEN
             RETURN l_res.current_mode;
         ELSE
-            RAISE_APPLICATION_ERROR(-20111, 'Неудалось определить текущий режим пересчета остатков: mode='
+            RAISE_APPLICATION_ERROR(-20111, 'РќРµСѓРґР°Р»РѕСЃСЊ РѕРїСЂРµРґРµР»РёС‚СЊ С‚РµРєСѓС‰РёР№ СЂРµР¶РёРј РїРµСЂРµСЃС‡РµС‚Р° РѕСЃС‚Р°С‚РєРѕРІ: mode='
                 ||l_res.current_mode||' mode_status='||l_res.mode_status||' mode_status_cnt='||l_res.mode_status_cnt);
         END IF;
     EXCEPTION
@@ -219,8 +219,8 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
     PROCEDURE check_balance_mode (a_target VARCHAR2) IS
     BEGIN
         IF (get_current_bal_state <> a_target) THEN
-            RAISE_APPLICATION_ERROR(-20111, 'Текущий режим "'||get_current_bal_state
-                ||'" не соответствует целевому "'||a_target||'"');
+            RAISE_APPLICATION_ERROR(-20111, 'РўРµРєСѓС‰РёР№ СЂРµР¶РёРј "'||get_current_bal_state
+                ||'" РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ С†РµР»РµРІРѕРјСѓ "'||a_target||'"');
         END IF;
     END check_balance_mode;
 
@@ -228,7 +228,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
         PRAGMA AUTONOMOUS_TRANSACTION;
         l_sq NUMBER;
     BEGIN
-        SELECT seq_trg_state.nextval INTO l_sq FROM DUAL;
+        SELECT trg_state_seq.nextval INTO l_sq FROM DUAL;
         INSERT INTO trg_state (table_name, trigger_name, trigger_state, ts, sq)
         SELECT table_name, trigger_name, status, systimestamp, l_sq
           FROM user_triggers WHERE table_name = 'PST';
@@ -242,8 +242,8 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
            enqueue     => true,
            dequeue     => false,
            wait        => true);
-        pkg_sys_utl.log_audit_warn(c_log_code_async, 'Очередь '||aq_pkg_const.c_normal_queue_name
-            ||' закрыта на прием сообщений');
+        pkg_sys_utl.log_audit_warn(c_log_code_async, 'РћС‡РµСЂРµРґСЊ '||aq_pkg_const.c_normal_queue_name
+            ||' Р·Р°РєСЂС‹С‚Р° РЅР° РїСЂРёРµРј СЃРѕРѕР±С‰РµРЅРёР№');
     END stop_queue;
 
     PROCEDURE check_error_queue IS
@@ -264,7 +264,7 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
                     WHEN e_already_stopped THEN null;
                 END;
                 dbms_scheduler.disable(nn.job_name, true);
-                PKG_SYS_UTL.LOG_AUDIT_WARN(c_log_code_async, 'Задача обработки очереди '||nn.job_name||' остановлена');
+                PKG_SYS_UTL.LOG_AUDIT_WARN(c_log_code_async, 'Р—Р°РґР°С‡Р° РѕР±СЂР°Р±РѕС‚РєРё РѕС‡РµСЂРµРґРё '||nn.job_name||' РѕСЃС‚Р°РЅРѕРІР»РµРЅР°');
             END LOOP;
         END stop_deq;
     BEGIN
@@ -272,11 +272,11 @@ CREATE OR REPLACE PACKAGE BODY aq_pkg_utl IS
             ||aq_pkg_const.C_NORMAL_QUEUE_TAB_NAME
             ||' where q_name = '''||aq_pkg_const.GET_BALANCE_EXC_QUEUE_NAME||'''' into l_cnt_errors;
         IF (l_cnt_errors > 0) THEN
-            pkg_sys_utl.log_audit_error(c_log_code_async, 'Есть ошибки обработки оборотов'
-                , 'Очередь ошибок содержит сообщений: '||to_char(l_cnt_errors)
-                    ||chr(10)||'. Обработка очереди будет остановлена. Сообщения в очереди ошибок необходимо'
-                    ||chr(10)||' обработать ПОСЛЕ устранения причины ошибок обработки. Подробности ошибок обработки см. таблицу AUDIT.'
-                    ||chr(10)||' Дальнейшая обработка поступающих оборотов желательна после обработки сообщений из очереди ошибок'
+            pkg_sys_utl.log_audit_error(c_log_code_async, 'Р•СЃС‚СЊ РѕС€РёР±РєРё РѕР±СЂР°Р±РѕС‚РєРё РѕР±РѕСЂРѕС‚РѕРІ'
+                , 'РћС‡РµСЂРµРґСЊ РѕС€РёР±РѕРє СЃРѕРґРµСЂР¶РёС‚ СЃРѕРѕР±С‰РµРЅРёР№: '||to_char(l_cnt_errors)
+                    ||chr(10)||'. РћР±СЂР°Р±РѕС‚РєР° РѕС‡РµСЂРµРґРё Р±СѓРґРµС‚ РѕСЃС‚Р°РЅРѕРІР»РµРЅР°. РЎРѕРѕР±С‰РµРЅРёСЏ РІ РѕС‡РµСЂРµРґРё РѕС€РёР±РѕРє РЅРµРѕР±С…РѕРґРёРјРѕ'
+                    ||chr(10)||' РѕР±СЂР°Р±РѕС‚Р°С‚СЊ РџРћРЎР›Р• СѓСЃС‚СЂР°РЅРµРЅРёСЏ РїСЂРёС‡РёРЅС‹ РѕС€РёР±РѕРє РѕР±СЂР°Р±РѕС‚РєРё. РџРѕРґСЂРѕР±РЅРѕСЃС‚Рё РѕС€РёР±РѕРє РѕР±СЂР°Р±РѕС‚РєРё СЃРј. С‚Р°Р±Р»РёС†Сѓ AUDIT.'
+                    ||chr(10)||' Р”Р°Р»СЊРЅРµР№С€Р°СЏ РѕР±СЂР°Р±РѕС‚РєР° РїРѕСЃС‚СѓРїР°СЋС‰РёС… РѕР±РѕСЂРѕС‚РѕРІ Р¶РµР»Р°С‚РµР»СЊРЅР° РїРѕСЃР»Рµ РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№ РёР· РѕС‡РµСЂРµРґРё РѕС€РёР±РѕРє'
                 , null);
             stop_queue();
             stop_deq();

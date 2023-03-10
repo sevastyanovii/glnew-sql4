@@ -5,7 +5,8 @@ CREATE TABLE cbbs
 	lvl      CHAR(1),
 	psav     CHAR(1),
 	name     VARCHAR2(200 CHAR),
-	act      CHAR(1)
+	dtb      DATE,
+	dte      DATE
 );
 
 CREATE UNIQUE INDEX pk01_bss ON cbbs (acc2);
@@ -19,4 +20,5 @@ COMMENT ON COLUMN cbbs.acc0    IS 'Категория счета (1-Актив,2
 COMMENT ON COLUMN cbbs.lvl     IS 'Уровень БС';
 COMMENT ON COLUMN cbbs.psav    IS 'Признак актив-пассив (0-актив, 1-пассив)';
 COMMENT ON COLUMN cbbs.name    IS 'Название БС';
-COMMENT ON COLUMN cbbs.act     IS 'Признак активности (актуальности) счета';
+COMMENT ON COLUMN cbbs.dtb     IS 'Начало действия записи';
+COMMENT ON COLUMN cbbs.dte     IS 'Окончание действия записи';

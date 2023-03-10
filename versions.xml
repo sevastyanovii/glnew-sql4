@@ -12,6 +12,190 @@
         <defaultSchema>GLNEW</defaultSchema>
         <!--
         -->
+        <item itemName="it0.0.1-001">
+            <body>
+                DEFINE NEED_DROP = 'APPUSER,SYSAUDIT,SYS_PROP,OD,CAL,CURRENCY,CURRATES,BNKBR,FCBR,CBCTP,DICTERM,SRCPST,CBBS,ACCTNAME,ACTPARM,CASA_ACTPARM,AC_CLASS,DOCTYPE,CUSTOMER,CUSTOMER_H,CUSTLOAD,ACC,ACC_H,ACOPENRQS,SYSAUDIT_SEQ'
+            </body>
+        </item>
+        <item itemName="it0.0.1-002">
+            <body>
+                <![CDATA[
+                declare
+                    c_tabs VARCHAR2(1000) := '&NEED_DROP';
+                begin
+                    -- drop tables
+                    for nn in (select table_name t from user_tables where table_name in (
+                        select regexp_substr (str, '[^,]+', 1, level) t
+                          from (select c_tabs str from dual)
+                               connect by level <= length(str) - length(replace(str, ',')) + 1))
+                    loop
+                        DBMS_OUTPUT.put_line ('dropping table '||nn.t);
+                        EXECUTE IMMEDIATE 'DROP TABLE '||nn.t||' CASCADE CONSTRAINTS PURGE';
+                    end loop;
+                    -- drop sequences
+                    for nn in (select sequence_name t from user_sequences where sequence_name in (
+                        select regexp_substr (str, '[^,]+', 1, level) t
+                          from (select c_tabs str from dual)
+                               connect by level <= length(str) - length(replace(str, ',')) + 1))
+                    loop
+                        DBMS_OUTPUT.put_line ('dropping sequence '||nn.t);
+                        EXECUTE IMMEDIATE 'DROP SEQUENCE '||nn.t;
+                    end loop;
+                end;
+                /
+                ]]>
+            </body>
+        </item>
+        <item itemName="it0.0.1-003">
+            <file>SQL/TABLES/APPUSER.sql</file>
+        </item>
+        <item itemName="it0.0.1-004">
+            <file>SQL/TABLES/AUDIT.sql</file>
+        </item>
+        <item itemName="it0.0.1-005">
+            <file>SQL/SEQUENCES/AUDIT_SEQ.sql</file>
+        </item>
+        <item itemName="it0.0.1-006">
+            <file>SQL/TABLES/SYS_PROP.sql</file>
+        </item>
+        <item itemName="it0.0.1-007">
+            <file>SQL/PACKAGES/PKG_FORMAT.sql</file>
+        </item>
+        <item itemName="it0.0.1-008">
+            <file>SQL/PACKAGES/PKG_PROP.sql</file>
+        </item>
+        <item itemName="it0.0.1-009">
+            <file>SQL/PACKAGES/PKG_SYS_UTL.sql</file>
+        </item>
+
+        <!-- Валюты и курсы валют -->
+        <item itemName="it0.0.1-101">
+            <file>SQL/TABLES/OD.sql</file>
+        </item>
+        <item itemName="it0.0.1-102">
+            <file>SQL/TABLES/CAL.sql</file>
+        </item>
+        <item itemName="it0.0.1-103">
+            <file>SQL/TABLES/CURRENCY.sql</file>
+        </item>
+        <item itemName="it0.0.1-104">
+            <file>SQL/TABLES/CURRATES.sql</file>
+        </item>
+
+        <!-- Бранчи, филиалы -->
+        <item itemName="it0.0.1-105">
+            <file>SQL/TABLES/BNKBR.sql</file>
+        </item>
+        <item itemName="it0.0.1-106">
+            <file>SQL/TABLES/FCBR.sql</file>
+        </item>
+
+        <!-- Справочники GL -->
+        <item itemName="it0.0.1-107">
+            <file>SQL/TABLES/CBCTP.sql</file>
+        </item>
+        <item itemName="it0.0.1-108">
+            <file>SQL/TABLES/DICTERM.sql</file>
+        </item>
+        <item itemName="it0.0.1-109">
+            <file>SQL/TABLES/SRCPST.sql</file>
+        </item>
+        <item itemName="it0.0.1-110">
+            <file>SQL/TABLES/CBBS.sql</file>
+        </item>
+        <item itemName="it0.0.1-111">
+            <file>SQL/TABLES/ACCTNAME.sql</file>
+        </item>
+        <item itemName="it0.0.1-112">
+            <file>SQL/TABLES/ACTPARM.sql</file>
+        </item>
+        <item itemName="it0.0.1-113">
+            <file>SQL/TABLES/CASA_ACTPARM.sql</file>
+        </item>
+        <item itemName="it0.0.1-114">
+            <file>SQL/TABLES/AC_CLASS.sql</file>
+        </item>
+        <item itemName="it0.0.1-115">
+            <file>SQL/TABLES/DOCTYPE.sql</file>
+        </item>
+
+        <!-- Регистрация клиентов -->
+        <item itemName="it0.0.1-114">
+            <file>SQL/TABLES/CUSTOMER.sql</file>
+        </item>
+        <item itemName="it0.0.1-115">
+            <file>SQL/TABLES/CUSTOMER_H.sql</file>
+        </item>
+        <item itemName="it0.0.1-116">
+            <file>SQL/TABLES/CUSTLOAD.sql</file>
+        </item>
+
+        <!-- Счет -->
+        <item itemName="it0.0.1-117">
+            <file>SQL/TABLES/ACC.sql</file>
+        </item>
+        <item itemName="it0.0.1-118">
+            <file>SQL/TABLES/ACC_H.sql</file>
+        </item>
+        <item itemName="it0.0.1-119">
+            <file>SQL/TABLES/ACOPENRQS.sql</file>
+        </item>
+
+        <!-- triggers -->
+        <item itemName="it0.0.1-201">
+            <file>SQL/TRIGGERS/trg_cbbs_bi.sql</file>
+        </item>
+        <item itemName="it0.0.1-202">
+            <file>SQL/TRIGGERS/trg_acc_h.sql</file>
+        </item>
+        <item itemName="it0.0.1-203">
+            <file>SQL/TRIGGERS/trg_customer_h.sql</file>
+        </item>
+
+        <!-- primary initialization -->
+        <item itemName="it0.0.1-301">
+            <file>SQL/DATA/od_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-302">
+            <file>SQL/DATA/currency_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-303">
+            <file>SQL/DATA/currates_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-304">
+            <file>SQL/DATA/bnkbr_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-305">
+            <file>SQL/DATA/fcbr_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-306">
+            <file>SQL/DATA/cbctp_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-307">
+            <file>SQL/DATA/dicterm_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-308">
+            <file>SQL/DATA/srcpst_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-309">
+            <file>SQL/DATA/acctname_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-310">
+            <file>SQL/DATA/actparm_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-311">
+            <file>SQL/DATA/doctype_data.sql</file>
+        </item>
+        <!-- GL_Param_Tables_AC_CASA_0.01_20230202.xlsx -->
+        <item itemName="it0.0.1-312">
+            <file>SQL/DATA/cbbs_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-313">
+            <file>SQL/DATA/casa_actparm_data.sql</file>
+        </item>
+        <item itemName="it0.0.1-314">
+            <file>SQL/DATA/ac_class_data.sql</file>
+        </item>
     </release>
 
 </versions>
