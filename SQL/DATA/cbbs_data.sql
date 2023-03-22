@@ -57,3 +57,11 @@ INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('20614', 'Срочн
 INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('20616', 'Срочные депозиты небанковских финансовых институтов', '2', '2', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
 INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('20618', 'Срочные депозиты индивидуальных предпринимателей', '2', '2', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
 INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('20696', 'Срочные депозиты других клиентов ', '2', '2', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
+
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('10313', 'Средства к получению от ЦБ - Система быстрых платежей', '1', '2', '0', to_date('2022-06-01', 'yyyy-mm-dd'));
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('10315', 'Средства к получению от ЦБ - клиринговая система ЦБ', '1', '2', '0', to_date('2022-06-01', 'yyyy-mm-dd'));
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('20800', 'К оплате в ЦБРУ', '2', '1', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('20814', 'Средства к уплате в ЦБ - Система быстрых платежей', '2', '2', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('20816', 'Средства, причитающиеся ЦБ - клиринговая система ЦБ', '2', '2', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('29800', 'Другие обязательства', '2', '1', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('29801', 'Расчеты с клиентами', '2', '2', '1', to_date('2022-06-01', 'yyyy-mm-dd'));

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="www.sqlpatchbuilder.org/table"
+            xmlns="www.sqlpatchbuilder.org/table"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+
+    <xs:element name="table">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="comments" type="xs:string" minOccurs="0"/>
+                <xs:element name="columns" type="columnsType"/>
+                <xs:element name="constraints" type="constraintsType" minOccurs="0"/>
+                <xs:element name="indexes" type="indexesType" minOccurs="0"/>
+                <xs:element name="data" type="dataType" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="columnType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="mandatory" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="primary" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="comments" type="xs:string" minOccurs="0"/>
+            <xs:element name="defaultValue" type="xs:string" minOccurs="0"/>
+            <xs:element name="foreign" type="foreignType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="constraintType">
+        <xs:sequence>
+            <xs:element name="constraintName" type="xs:string"/>
+            <xs:element name="sqlExpression" type="sqlExpressionType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="indexType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="unique" type="xs:boolean"/>
+            <xs:element name="sqlExpression" type="sqlExpressionType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="indexesType">
+        <xs:sequence>
+            <xs:element name="index" type="indexType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="columnsType">
+        <xs:sequence>
+            <xs:element name="column" type="columnType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="constraintsType">
+        <xs:sequence>
+            <xs:element name="constraint" type="constraintType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:simpleType name="sqlExpressionType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:complexType name="foreignType">
+        <xs:sequence>
+            <xs:element name="foreignTableName" type="xs:string"/>
+            <xs:element name="foreignTabColumnName" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="dataType">
+        <xs:sequence>
+            <xs:element name="values" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+</xs:schema>

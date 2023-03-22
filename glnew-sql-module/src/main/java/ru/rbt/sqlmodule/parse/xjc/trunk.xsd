@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="www.sqlpatchbuilder.org"
+            xmlns="www.sqlpatchbuilder.org"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+
+    <xsd:element name="trunk">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="module" type="xsd:string"/>
+                <xsd:element name="version" type="xsd:string"/>
+                <xsd:element name="applyedTo" type="applyedToType"/>
+                <xsd:element name="defaultSchema" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="dbpaths" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="applyedToType">
+        <xsd:sequence>
+            <xsd:element name="version" type="xsd:string" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="dbpaths">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="dbpath" type="xsd:string" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="item">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:choice>
+                    <xsd:element name="file" type="xsd:string"/>
+                    <xsd:element name="body" type="xsd:string"/>
+                    <xsd:element name="table" type="xsd:string"/>
+                </xsd:choice>
+                <xsd:element name="backup" type="BackupType" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="onSqlError" type="OnSqlErrorType" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="rollback" type="RollbackActionType" minOccurs="0" maxOccurs="1"/>
+            </xsd:sequence>
+            <xsd:attribute name="itemName" type="xsd:ID" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="BackupType">
+        <xsd:sequence>
+            <xsd:element name="objectName" type="xsd:string"/>
+            <xsd:element name="objectType" type="DbObjectType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="DbObjectType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="table"/>
+            <xsd:enumeration value="view"/>
+            <xsd:enumeration value="procedure"/>
+            <xsd:enumeration value="function"/>
+            <xsd:enumeration value="package"/>
+            <xsd:enumeration value="trigger"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="OnSqlErrorType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="EXIT"/>
+            <xsd:enumeration value="CONTINUE"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="RollbackActionType">
+        <xsd:sequence>
+            <xsd:choice>
+                <xsd:element name="body" type="xsd:string"/>
+                <xsd:element name="command" type="xsd:string"/>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>

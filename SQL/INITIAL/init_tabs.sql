@@ -5,7 +5,7 @@ CREATE TABLE sysmod
     patch   VARCHAR2(255),
     vdate   TIMESTAMP NOT NULL,
     pdate   TIMESTAMP
-);
+) TABLESPACE gl_data;
 
 COMMENT ON TABLE sysmod IS 'Current version of GL-sql';
 
@@ -28,7 +28,7 @@ CREATE TABLE sysvlog (
     vpname VARCHAR2(255) NOT NULL,
     message VARCHAR2(4000) NOT NULL,
     ts TIMESTAMP DEFAULT SYSTIMESTAMP
-);
+) TABLESPACE gl_data;
 
 COMMENT ON TABLE sysvlog IS 'GL install log';
 
@@ -63,7 +63,7 @@ CREATE TABLE install_job (
     chk      VARCHAR2(64) NOT NULL,
     ts       TIMESTAMP DEFAULT SYSTIMESTAMP,
     CONSTRAINT ch_instjob01 CHECK (chk IN ('SAVED','RESTORED'))
-);
+) TABLESPACE gl_data;
 
 COMMENT ON TABLE  install_job IS 'Table for storing tables during patching';
 

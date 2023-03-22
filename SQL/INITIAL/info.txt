@@ -3,12 +3,17 @@
 1. init_tabs.sql
 2. db_conf.sql
 
+
+Предварительно должен быть создан пользователь и выданы гранты:
+CREATE BIGFILE TABLESPACE gl_data DATAFILE 'gl_data.dat' SIZE 1000M AUTOEXTEND ON;
+CREATE BIGFILE TABLESPACE gl_indx DATAFILE 'gl_indx.dat' SIZE 100M AUTOEXTEND ON;
+
 CREATE USER GL2TDS IDENTIFIED BY gl2tds;
 GRANT CREATE SESSION TO gl2tds;
 GRANT CREATE ANY SYNONYM TO gl2tds;
 
 
-CREATE USER glnew01 IDENTIFIED BY glnew01;
+CREATE USER glnew01 IDENTIFIED BY glnew01 default tablespace gl_data;
 GRANT CREATE SESSION TO glnew01;
 GRANT CREATE TABLE TO glnew01;
 GRANT CREATE VIEW TO glnew01;
@@ -24,19 +29,11 @@ GRANT CREATE ANY JOB TO glnew01;
 GRANT EXECUTE ON dbms_lock TO glnew01;
 GRANT EXECUTE ON SYS.DEFAULT_IN_MEMORY_JOB_CLASS TO glnew01;
 GRANT EXECUTE ON dbms_pipe TO glnew01;
-ALTER USER glnew01 quota 1000M on USERS;
+ALTER USER glnew01 quota 1000M ON gl_data;
+ALTER USER glnew01 quota 1000M ON gl_indx;
 GRANT RESUMABLE TO glnew01;
 
-
-GRANT CREATE ANY TYPE TO glnew;
-GRANT EXECUTE ON dbms_aqadm TO glnew;
-GRANT EXECUTE ON dbms_aq TO glnew;
-GRANT MANAGE SCHEDULER TO glnew;
-GRANT CREATE ANY JOB TO glnew;
-GRANT EXECUTE ON dbms_lock TO glnew;
-GRANT EXECUTE ON SYS.DEFAULT_IN_MEMORY_JOB_CLASS TO glnew;
-GRANT EXECUTE ON dbms_pipe TO glnew;
-
+Прочее (заметки на полях):
 Создать группу для саппорта и дать права на изменение данных
 
 Замечания:

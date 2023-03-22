@@ -1,6 +1,6 @@
 CREATE TABLE ae_in_pst
 (
-    id         NUMBER(22,0) DEFAULT ae_pst_seq.nextval,
+    id         NUMBER(22,0) DEFAULT pst_seq.nextval,
 	src_pst	   VARCHAR2(128 BYTE) NOT NULL,
 	evt_id	   VARCHAR2(128 BYTE) NOT NULL,
 	deal_id	   VARCHAR2(128 BYTE),

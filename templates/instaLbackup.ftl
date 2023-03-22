@@ -14,7 +14,7 @@
 
 <#assign tables=tables?remove_ending(",")>
 
-EXEC DB_CONF.INSTALL_BACKUP('${version.version}', 'GLPATCH', '${tables}');
+--EXEC DB_CONF.INSTALL_BACKUP('${version.version}', 'GLPATCH', '${tables}');
 
 <#include "stop_jobs.ftl">
 

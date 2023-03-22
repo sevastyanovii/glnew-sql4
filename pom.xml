@@ -11,8 +11,8 @@
     <dependencies>
         <dependency>
             <groupId>ru.rbt</groupId>
-            <artifactId>barsgl-sql-module</artifactId>
-            <version>3.1.45-SNAPSHOT</version>
+            <artifactId>glnew-sql-module</artifactId>
+            <version>3.1.44</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -99,7 +99,7 @@
                                         <include name="**/*.xsd" />
                                     </patternset>
                                     <fileset dir="${project.build.directory}">
-                                        <include name="barsgl*sources.jar" />
+                                        <include name="glnew*sources.jar" />
                                     </fileset>
                                 </unjar>
                                 <copy todir="xsd" flatten="true" overwrite="true">
@@ -155,7 +155,7 @@
                                         <echo message="Building patch: '${project.version}'" />
                                         <path id="project.classpath">
                                             <fileset dir="${project.build.directory}">
-                                                <include name="barsgl-sql*.jar" />
+                                                <include name="glnew-sql*.jar" />
                                                 <include name="freemarker*.jar" />
                                             </fileset>
                                         </path>
@@ -226,7 +226,7 @@
                                         <echo message="Building patch: '${project.version}'" />
                                         <path id="project.classpath">
                                             <fileset dir="${project.build.directory}">
-                                                <include name="barsgl-sql*.jar" />
+                                                <include name="glnew-sql*.jar" />
                                                 <include name="freemarker*.jar" />
                                             </fileset>
                                         </path>
@@ -296,7 +296,7 @@
                                         <echo message="Building patch: '${project.version}'" />
                                         <path id="project.classpath">
                                             <fileset dir="${project.build.directory}">
-                                                <include name="barsgl-sql*.jar" />
+                                                <include name="glnew-sql*.jar" />
                                                 <include name="freemarker*.jar" />
                                             </fileset>
                                         </path>
@@ -344,7 +344,7 @@
                                         <echo message="Building trunk.sql" />
                                         <path id="project.classpath">
                                             <fileset dir="${project.build.directory}">
-                                                <include name="barsgl-sql*.jar" />
+                                                <include name="glnew-sql*.jar" />
                                                 <include name="freemarker*.jar" />
                                             </fileset>
                                         </path>
@@ -390,7 +390,7 @@
                                         <echo message="Building trunk.sql" />
                                         <path id="project.classpath">
                                             <fileset dir="${project.build.directory}">
-                                                <include name="barsgl-sql*.jar" />
+                                                <include name="glnew-sql*.jar" />
                                                 <include name="freemarker*.jar" />
                                             </fileset>
                                         </path>

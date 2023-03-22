@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="www.sqlpatchbuilder.org"
+            xmlns="www.sqlpatchbuilder.org"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+
+    <xsd:include schemaLocation="trunk.xsd"/>
+
+    <xsd:element name="versions">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="release" minOccurs="1" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="release">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="module" type="xsd:string"/>
+                <xsd:element name="version" type="xsd:string"/>
+                <xsd:element name="applyedTo" type="applyedToType"/>
+                <xsd:element name="defaultSchema" type="xsd:string"/>
+                <xsd:element ref="dbpaths" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
