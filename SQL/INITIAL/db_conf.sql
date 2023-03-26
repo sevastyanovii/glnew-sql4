@@ -1,3 +1,4 @@
+-- @Deprecated этот файл устарел использовать SQL/PACKAGES/DB_CONF.sql
 create or replace PACKAGE DB_CONF IS
 
     INDEX_PARALLEL INTEGER := 1;

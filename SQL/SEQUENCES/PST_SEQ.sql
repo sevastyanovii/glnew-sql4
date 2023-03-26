@@ -1,1 +1,2 @@
-create sequence pst_seq; -- sequence for pst table
+-- sequence for pst table
+create sequence pst_seq;

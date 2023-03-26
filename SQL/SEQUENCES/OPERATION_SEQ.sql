@@ -1,1 +1,2 @@
-create sequence operation_seq; -- sequence for operation table
+-- sequence for operation table
+create sequence operation_seq;

@@ -8,3 +8,4 @@ target
 /patch-*.sql
 /rollback-*.sql
 /SQL/DEVELOP/
+**/tnsnames.ora

@@ -9,138 +9,17 @@
     </applyedTo>
     <defaultSchema>GLNEW</defaultSchema>
 
-    <item itemName="it0.0.2-001">
-        <body>
-            DEFINE NEED_DROP = 'AE_IN_PST,OPERATION,PST,BALTUR,TRG_STATE,AQPBR,BSACCLK,AE_PST_SEQ,OPERATION_SEQ,TRG_STATE_SEQ,PST_SEQ'
-        </body>
-    </item>
-    <item itemName="it0.0.2-002">
-        <body>
-            <![CDATA[
-            declare
-                c_tabs VARCHAR2(1000) := '&NEED_DROP';
-            begin
-                -- drop tables
-                for nn in (select table_name t from user_tables where table_name in (
-                    select regexp_substr (str, '[^,]+', 1, level) t
-                      from (select c_tabs str from dual)
-                           connect by level <= length(str) - length(replace(str, ',')) + 1))
-                loop
-                    DBMS_OUTPUT.put_line ('dropping table '||nn.t);
-                    EXECUTE IMMEDIATE 'DROP TABLE '||nn.t||' CASCADE CONSTRAINTS PURGE';
-                end loop;
-                -- drop sequences
-                for nn in (select sequence_name t from user_sequences where sequence_name in (
-                    select regexp_substr (str, '[^,]+', 1, level) t
-                      from (select c_tabs str from dual)
-                           connect by level <= length(str) - length(replace(str, ',')) + 1))
-                loop
-                    DBMS_OUTPUT.put_line ('dropping sequence '||nn.t);
-                    EXECUTE IMMEDIATE 'DROP SEQUENCE '||nn.t;
-                end loop;
-            end;
-            /
-            ]]>
-        </body>
-    </item>
-    <item itemName="it0.0.2-003">
-        <file>SQL/OTHERS/AE_JOBS_DROP.sql</file>
-    </item>
-    <item itemName="it0.0.2-004">
-        <file>SQL/OTHERS/AQ_QUEUE_DROP.sql</file>
-    </item>
-
-    <!-- Îáðàáîòêà ñîáûòèé AE è ôîðìèðîâàíèå ïðîâîäîê GL -->
-    <item itemName="it0.0.2-401">
-        <file>SQL/PACKAGES/AQ_PKG_CONST.sql</file>
-    </item>
-    <item itemName="it0.0.2-402">
-        <file>SQL/OTHERS/AQ_TYPE.sql</file>
-    </item>
-    <item itemName="it0.0.2-403">
-        <file>SQL/OTHERS/AQ_QUEUE.sql</file>
-    </item>
-
-    <!-- sequences -->
-    <item itemName="it0.0.2-411">
-        <file>SQL/SEQUENCES/AE_PST_SEQ.sql</file>
-    </item>
-    <item itemName="it0.0.2-412">
-        <file>SQL/SEQUENCES/OPERATION_SEQ.sql</file>
-    </item>
-    <item itemName="it0.0.2-413">
-        <file>SQL/SEQUENCES/TRG_STATE_SEQ.sql</file>
-    </item>
-    <item itemName="it0.0.2-414">
-        <file>SQL/SEQUENCES/PST_SEQ.sql</file>
-    </item>
-
-    <!--Òàáëèöû -->
-    <item itemName="it0.0.2-421">
-        <file>SQL/TABLES/AE_IN_PST.sql</file>
-    </item>
-    <item itemName="it0.0.2-422">
-        <file>SQL/TABLES/OPERATION.sql</file>
-    </item>
-    <item itemName="it0.0.2-423">
-        <file>SQL/TABLES/PST.sql</file>
-    </item>
-    <item itemName="it0.0.2-424">
-        <file>SQL/TABLES/BALTUR.sql</file>
-    </item>
-    <item itemName="it0.0.2-425">
-        <file>SQL/TABLES/AQPBR.sql</file>
-    </item>
-    <item itemName="it0.0.2-426">
-        <file>SQL/TABLES/BSACCLK.sql</file>
-    </item>
-    <item itemName="it0.0.2-427">
-        <file>SQL/TABLES/TRG_STATE.sql</file>
-    </item>
-
-    <!-- Triggers -->
-    <item itemName="it0.0.2-442">
-        <file>SQL/TRIGGERS/PSTAI.sql</file>
-    </item>
-    <item itemName="it0.0.2-443">
-        <file>SQL/TRIGGERS/PSTAU.sql</file>
-    </item>
-    <item itemName="it0.0.2-444">
-        <file>SQL/TRIGGERS/PSTAD.sql</file>
-    </item>
-
-    <!-- views -->
-    <item itemName="it0.0.2-451">
-        <file>SQL/VIEWS/V_BALMODE_TRG.sql</file>
-    </item>
-    <item itemName="it0.0.2-452">
-        <file>SQL/VIEWS/V_BALMODE_STATUS.sql</file>
-    </item>
-
-    <!-- packages -->
-    <item itemName="it0.0.2-461">
-        <file>SQL/PACKAGES/AQ_PKG.sql</file>
-    </item>
-    <item itemName="it0.0.2-462">
-        <file>SQL/TRIGGERS/AQ_TRG_PST.sql</file>
-    </item>
-    <item itemName="it0.0.2-463">
-        <file>SQL/PACKAGES/AQ_PKG_UTL.sql</file>
-    </item>
-    <item itemName="it0.0.2-464">
-        <file>SQL/PACKAGES/PKG_CURRENCY.sql</file>
-    </item>
-    <item itemName="it0.0.2-465">
-        <file>SQL/PROCEDURES/PROCESS_IN_PST.sql</file>
-    </item>
-    <item itemName="it0.0.2-466">
-        <file>SQL/PROCEDURES/PROCESS_AE.sql</file>
-    </item>
-    <item itemName="it0.0.2-467">
-        <file>SQL/OTHERS/AE_JOBS.sql</file>
-    </item>
-
     <!--ÂÍÈÌÀÍÈÅ!!! ÏÐÈ ÑÁÎÐÊÅ ÐÅËÈÇÀ ÓÁÅÐÈ ÒÅÑÒÎÂÛÉ ÊÎÄ !!! -->
 
     <!--REMOVE TESTS BEFORE RELEASE!!!-REMOVE TESTS BEFORE RELEASE!!!-REMOVE TESTS BEFORE RELEASE!!!-REMOVE TESTS BEFORE RELEASE!!!-REMOVE TESTS BEFORE RELEASE!!!-REMOVE TESTS BEFORE RELEASE!!!-->
+
+    <item itemName="it0.0.3-sevastyanov-001-01">
+        <file>SQL/PACKAGES/DB_CONF.sql</file>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-001">
+        <file>SQL/TABLES/CURRENCY.sql</file>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-002">
+        <file>SQL/DATA/currency_data.sql</file>
+    </item>
 </trunk>

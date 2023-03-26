@@ -1,0 +1,12 @@
+set TNS_ADMIN=
+
+set SYS_USER=sys
+set SYS_PASSWD=sys
+
+set USER=gl
+set PASSWD=gl
+set DB=orcl2
+
+set NLS_LANG=.RU8PC866
+
+sqlplus /nolog @trunk.sql %USER% %PASSWD% %SYS_USER% %SYS_PASSWD% %DB%

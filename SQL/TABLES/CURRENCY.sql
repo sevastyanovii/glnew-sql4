@@ -1,3 +1,5 @@
+exec db_conf.DROP_TABLE_IF_EXISTS(user, 'CURRENCY');
+
 CREATE TABLE currency
 (
     glccy  CHAR(3) PRIMARY KEY,
