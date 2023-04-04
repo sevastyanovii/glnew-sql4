@@ -1,3 +1,4 @@
+-- обработка проводок АЕ перенесена в Java
 CREATE OR REPLACE PROCEDURE process_in_pst(p_id NUMBER, p_od DATE)
 IS
 	l_gloid    NUMBER(22,0);

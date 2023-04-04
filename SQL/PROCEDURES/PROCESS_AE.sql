@@ -1,3 +1,5 @@
+-- обработка проводок АЕ перенесена в Java
+
 CREATE OR REPLACE PROCEDURE process_ae
 IS
 	v_od_phase VARCHAR2(16);

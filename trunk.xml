@@ -16,10 +16,36 @@
     <item itemName="it0.0.3-sevastyanov-001-01">
         <file>SQL/PACKAGES/DB_CONF.sql</file>
     </item>
+    <item itemName="it0.0.3-sevastyanov-001-02">
+        <body>
+drop procedure PROCESS_AE;
+drop procedure PROCESS_IN_PST;
+drop procedure PROCESS_AE_FROM_PIPE;
+drop table gl_oper;
+        </body>
+        <onSqlError>CONTINUE</onSqlError>
+    </item>
     <item itemName="it0.0.3-sevastyanov-001">
         <file>SQL/TABLES/CURRENCY.sql</file>
     </item>
     <item itemName="it0.0.3-sevastyanov-002">
         <file>SQL/DATA/currency_data.sql</file>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-003">
+        <body>
+<![CDATA[
+alter table ACC modify DTM default systimestamp;
+alter table ACC modify DTR default systimestamp;
+]]>
+        </body>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-004">
+        <body>
+<![CDATA[
+alter table OPERATION add BRANCH_DT CHAR(3);
+alter table OPERATION add BRANCH_CR CHAR(3);
+]]>
+        </body>
+        <onSqlError>CONTINUE</onSqlError>
     </item>
 </trunk>
