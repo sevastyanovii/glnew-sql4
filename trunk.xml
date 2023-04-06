@@ -39,13 +39,17 @@ alter table ACC modify DTR default systimestamp;
 ]]>
         </body>
     </item>
-    <item itemName="it0.0.3-sevastyanov-004">
-        <body>
-<![CDATA[
-alter table OPERATION add BRANCH_DT CHAR(3);
-alter table OPERATION add BRANCH_CR CHAR(3);
-]]>
-        </body>
+    <item itemName="it0.0.3-sevastyanov-005">
+        <file>SQL/TABLES/POSITION_ACC.sql</file>
         <onSqlError>CONTINUE</onSqlError>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-006-001">
+        <body>drop table operation purge;</body>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-006-002">
+        <file>SQL/TABLES/OPERATION.sql</file>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-006">
+        <table>SQL/TABLES/OPERATION.xml</table>
     </item>
 </trunk>
