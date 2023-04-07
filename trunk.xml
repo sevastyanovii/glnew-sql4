@@ -52,4 +52,7 @@ alter table ACC modify DTR default systimestamp;
     <item itemName="it0.0.3-sevastyanov-006">
         <table>SQL/TABLES/OPERATION.xml</table>
     </item>
+    <item itemName="it0.0.3-sevastyanov-007">
+        <file>SQL/TABLES/PARAMS.sql</file>
+    </item>
 </trunk>
