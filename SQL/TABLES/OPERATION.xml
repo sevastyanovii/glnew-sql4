@@ -31,7 +31,7 @@
             <comments>Локальный эквивалент суммы базовой валют по курсу ЦБ на дату операции</comments>
         </column>
         <column>
-            <name>EXCН_DIFF</name>
+            <name>EXCH_DIFF</name>
             <type>NUMBER(19,3)</type>
             <comments><![CDATA[Курсовая разница от валютообменной операции, >0 для положительной, <0 для отрицательной]]></comments>
         </column>
@@ -58,6 +58,11 @@
             <type>CHAR(5 CHAR)</type>
 <!--          TODO в ФСД обязательное поле   <mandatory>true</mandatory>-->
             <comments>МФО Банка, в котором открыт счет кредита AC_DR</comments>
+        </column>
+        <column>
+            <name>BASE_CCY</name>
+            <type>CHAR(3 CHAR)</type>
+            <comments>Базовая валюта (для расчета эквивалента в локальной валюте)</comments>
         </column>
     </columns>
 </table>

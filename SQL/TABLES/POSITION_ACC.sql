@@ -1,6 +1,6 @@
 create table position_acc (
       ccy	char(3 char) not null
-    , bank_id	char(3 byte) not null
+    , bank_id	char(5 char) not null
     , ac_pos	varchar2(20 char) not null
     , ac_pos_eqv	varchar2(20 char)	not null
     , constraint un_position_acc unique (ccy, bank_id)

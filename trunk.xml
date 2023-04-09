@@ -39,6 +39,9 @@ alter table ACC modify DTR default systimestamp;
 ]]>
         </body>
     </item>
+    <item itemName="it0.0.3-sevastyanov-005-001">
+        <body>drop table POSITION_ACC purge;</body>
+    </item>
     <item itemName="it0.0.3-sevastyanov-005">
         <file>SQL/TABLES/POSITION_ACC.sql</file>
         <onSqlError>CONTINUE</onSqlError>
