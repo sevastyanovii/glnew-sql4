@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<table xmlns="www.sqlpatchbuilder.org/table"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="www.sqlpatchbuilder.org/table ../../xsd/table-definition.xsd">
+    <name>ACC</name>
+    <comments>Банковский счет</comments>
+    <columns>
+        <column>
+            <name>POSTYPE</name>
+            <type>CHAR(3 CHAR)</type>
+            <comments>Признак счета валютной позиции (POS) или счета эквивалента валютной позиции (EQV)</comments>
+        </column>
+        <column>
+            <name>CCY_POS</name>
+            <type>CHAR(3 CHAR)</type>
+            <comments>Буквенный код валюты валютной позиции</comments>
+        </column>
+    </columns>
+    <constraints>
+        <constraint>
+            <constraintName>CH_ACC_POSTYPE</constraintName>
+            <sqlExpression>CHECK (POSTYPE IN ('POS','EQV'))</sqlExpression>
+        </constraint>
+    </constraints>
+</table>

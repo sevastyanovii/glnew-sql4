@@ -64,5 +64,10 @@
             <type>CHAR(3 CHAR)</type>
             <comments>Базовая валюта (для расчета эквивалента в локальной валюте)</comments>
         </column>
+        <column>
+            <name>AC_CCYEXCH</name>
+            <type>VARCHAR2(20 CHAR)</type>
+            <comments>Счет курсовой разницы</comments>
+        </column>
     </columns>
 </table>
