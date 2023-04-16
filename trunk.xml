@@ -76,4 +76,10 @@ drop table gl_oper;
     <item itemName="it0.0.3-sevastyanov-012">
         <file>SQL/DATA/acctname_data.sql</file>
     </item>
+    <item itemName="it0.0.3-sevastyanov-013-001">
+        <body>drop table PST purge;</body>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-013">
+        <file>SQL/TABLES/PST.sql</file>
+    </item>
 </trunk>
