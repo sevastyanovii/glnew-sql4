@@ -65,3 +65,8 @@ INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('20814', 'Средс
 INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('20816', 'Средства, причитающиеся ЦБ - клиринговая система ЦБ', '2', '2', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
 INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('29800', 'Другие обязательства', '2', '1', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
 INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('29801', 'Расчеты с клиентами', '2', '2', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
+
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('17101', 'Счета валютной позиции', '1', '2', null, to_date('2022-06-01', 'yyyy-mm-dd'));
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('45401', 'Прибыль в иностранной валюте по сделкам "Спот"', '4', '2', '1', to_date('2022-06-01', 'yyyy-mm-dd'));
+INSERT INTO cbbs (acc2, name, acc0, lvl, psav, dtb) VALUES ('55302', 'Убытки в иностранной валюте по сделкам "Спот"', '5', '2', '0', to_date('2022-06-01', 'yyyy-mm-dd'));
+

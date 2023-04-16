@@ -1,20 +1,5 @@
 DELETE FROM actparm;
-/*
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000200',	'01',	'00',	'20202', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000300',	'12',	'00',	'20203', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000400',	'12',	'00',	'20204', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000050',	'03',	'00',	'20205', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'08',	'00',	'20206', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'13',	'00',	'20207', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'09',	'00',	'20208', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'02',	'00',	'20210', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'03',	'00',	'20212', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'10',	'00',	'20214', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'04',	'00',	'20216', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'11',	'00',	'20218', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'05',	'00',	'20296', '2022-12-01');
-INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000000',	'21',	'00',	'20296', '2022-12-01');
-*/
+
 INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000201', '01', '00', '20202', to_date('2022-12-01', 'yyyy-mm-dd'));
 INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000301', '12', '00', '20203', to_date('2022-12-01', 'yyyy-mm-dd'));
 INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('202000401', '12', '00', '20204', to_date('2022-12-01', 'yyyy-mm-dd'));
@@ -57,3 +42,8 @@ INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('206000001', '04
 INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('206000001', '11', '00', '20618', to_date('2022-12-01', 'yyyy-mm-dd'));
 INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('206000001', '05', '00', '20696', to_date('2022-12-01', 'yyyy-mm-dd'));
 INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('206000001', '21', '00', '20696', to_date('2022-12-01', 'yyyy-mm-dd'));
+
+INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('171010101', '00', '00', '17101', to_date('2022-12-01', 'yyyy-mm-dd'));
+INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('171010201', '00', '00', '17101', to_date('2022-12-01', 'yyyy-mm-dd'));
+INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('454010001', '00', '00', '45401', to_date('2022-12-01', 'yyyy-mm-dd'));
+INSERT INTO actparm (acctype,	custype,	term,	acc2, dtb) VALUES ('553020001', '00', '00', '55302', to_date('2022-12-01', 'yyyy-mm-dd'));

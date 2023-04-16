@@ -8,6 +8,6 @@ COMMIT;
 
 <#include "start_jobs.ftl">
 
---SPOOL OFF
+SPOOL OFF
 
---DISCONNECT
+DISCONNECT

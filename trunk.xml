@@ -31,14 +31,6 @@ drop table gl_oper;
     <item itemName="it0.0.3-sevastyanov-002">
         <file>SQL/DATA/currency_data.sql</file>
     </item>
-    <item itemName="it0.0.3-sevastyanov-003">
-        <body>
-<![CDATA[
-alter table ACC modify DTM default systimestamp;
-alter table ACC modify DTR default systimestamp;
-]]>
-        </body>
-    </item>
     <item itemName="it0.0.3-sevastyanov-005-001">
         <body>drop table POSITION_ACC purge;</body>
     </item>
@@ -65,27 +57,23 @@ alter table ACC modify DTR default systimestamp;
     <item itemName="it0.0.3-sevastyanov-008">
         <file>SQL/TABLES/ACCTYPE_PARAMS.sql</file>
     </item>
+    <item itemName="it0.0.3-sevastyanov-009-002">
+        <body>drop table acc purge;</body>
+        <onSqlError>CONTINUE</onSqlError>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-009-001">
+        <file>SQL/TABLES/ACC.sql</file>
+    </item>
     <item itemName="it0.0.3-sevastyanov-009">
         <table>SQL/TABLES/ACC.xml</table>
     </item>
     <item itemName="it0.0.3-sevastyanov-010">
-        <body>
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('202000001','00','00','20210',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('202000201','00','00','20202',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('202000301','00','00','20203',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('202000401','00','00','20204',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('202000501','00','00','20205',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('204000001','00','00','20410',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('204000201','00','00','20402',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('204000301','00','00','20403',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('204000401','00','00','20404',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('204000501','00','00','20405',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('206000001','00','00','20610',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('206000201','00','00','20602',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('206000301','00','00','20603',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('206000401','00','00','20604',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-Insert into ACTPARM (ACCTYPE,CUSTYPE,TERM,ACC2,DTB,DTE) values ('206000501','00','00','20605',to_date('2022-12-01 00:00:00','YYYY-MM-DD HH24:MI:SS'),null);
-        </body>
-        <onSqlError>CONTINUE</onSqlError>
+        <file>SQL/DATA/actparm_data.sql</file>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-011">
+        <file>SQL/DATA/cbbs_data.sql</file>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-012">
+        <file>SQL/DATA/acctname_data.sql</file>
     </item>
 </trunk>
