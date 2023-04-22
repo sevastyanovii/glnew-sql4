@@ -74,6 +74,7 @@ create or replace package body test_pkg_balance is
         lr_pst_dr pst%rowtype;
         l_pstid_dr pst.id%type;
         c_amnt_before_dr number := -150;
+        l_pst_id_dr_before_2 pst.id%type;
 
         procedure init is
         begin
@@ -176,7 +177,6 @@ create or replace package body test_pkg_balance is
 
         declare
             c_pod_btw date := c_pod - 2;
-            l_pst_id_dr_before pst.id%type;
             type t_baltur is table of baltur%rowtype;
             lt_baltur t_baltur;
             lr_baltur baltur%rowtype;
@@ -186,7 +186,7 @@ create or replace package body test_pkg_balance is
             Insert into PST (POD,VALD,ACC_ID,BSAACID,CCY,AMNT,PBR,INVISIBLE,PCID,NRTL
                     ,GLO_REF,EVTP,PROCDATE,DEAL_ID,SUBDEAL_ID,EVT_ID,PMT_REF,NRTE,POST_TYPE)
             values (c_pod_btw, c_pod_btw, 0,c_bsaacid_dr,'USD',c_amnt_before_dr_2,'CASA','0',974,'МОСБИРЖА',511
-                    ,null,'2022-11-30',null,null,'1682138913562',null,'NASDAC',2) returning id into l_pst_id_dr_before;
+                    ,null,'2022-11-30',null,null,'1682138913562',null,'NASDAC',2) returning id into l_pst_id_dr_before_2;
             commit;
 
             select * bulk collect into lt_baltur from baltur where bsaacid = c_bsaacid_dr order by dat;
@@ -194,6 +194,22 @@ create or replace package body test_pkg_balance is
                 raise_application_error(-20000, pkg_format.msg_format3('Некорр кол-во baltur: "{0}"', lt_baltur.count ));
             end if;
             if (lt_baltur(3).obac <> c_amnt_before_dr + c_amnt_before_dr_2) then
+                raise_application_error(-20000, pkg_format.msg_format3('Некорр 4 obac: "{0}"', lt_baltur(3).obac));
+            end if;
+        end;
+
+        declare
+            type t_baltur is table of baltur%rowtype;
+            lt_baltur t_baltur;
+            lr_baltur baltur%rowtype;
+        begin
+            update pst set invisible = '1' where id = l_pst_id_dr_before_2;
+            commit;
+            select * bulk collect into lt_baltur from baltur where bsaacid = c_bsaacid_dr order by dat;
+            if (lt_baltur.count <> 3) then
+                raise_application_error(-20000, pkg_format.msg_format3('Некорр кол-во baltur: "{0}"', lt_baltur.count ));
+            end if;
+            if (lt_baltur(3).obac <> c_amnt_before_dr) then
                 raise_application_error(-20000, pkg_format.msg_format3('Некорр 4 obac: "{0}"', lt_baltur(3).obac));
             end if;
         end;
