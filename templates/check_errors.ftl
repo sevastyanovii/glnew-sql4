@@ -35,12 +35,13 @@ BEGIN
 END;
 /
 
---DECLARE
---    L_ERRORS NUMBER(10);
---BEGIN
---    SELECT COUNT(1) INTO L_ERRORS FROM SPERRORLOG;
---    IF (L_ERRORS > 0) THEN
---        RAISE_APPLICATION_ERROR(-20111, 'SQL PLUS <SP2> errors after running the installation script: '||TO_CHAR(L_ERRORS));
---    END IF;
---END;
---/
+DECLARE
+    L_ERRORS NUMBER(10);
+BEGIN
+    SELECT COUNT(1) INTO L_ERRORS FROM SPERRORLOG;
+    IF (L_ERRORS > 0) THEN
+        RAISE_APPLICATION_ERROR(-20111, 'SQL PLUS <SP2> errors after running the installation script: '||TO_CHAR(L_ERRORS));
+    END IF;
+END;
+/
+

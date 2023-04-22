@@ -32,7 +32,7 @@ BEGIN
             (CASE WHEN baltur.dat = :nrow.pod THEN baltur.obbc ELSE baltur.obbc + (baltur.ctbc + baltur.dtbc) END)
             INTO btdat, btdatto, btdatl, btbsaacid, btobac, btobbc
         FROM baltur WHERE baltur.datto = DB_CONF.C_MAX_BALANCE_DATE
-          AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid FOR UPDATE NOWAIT;
+         AND baltur.bsaacid = :nrow.bsaacid FOR UPDATE NOWAIT;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
             btdat := null; btdatto := null; btdatl := null; btbsaacid := null; btobac := null; btobbc := null;
@@ -54,13 +54,13 @@ BEGIN
                dtbc = baltur.dtbc + curdtbc,
                ctac = baltur.ctac + curctac,
                ctbc = baltur.ctbc + curctlc
-         WHERE baltur.dat = :nrow.pod AND baltur.datto = btdatto AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
+         WHERE baltur.dat = :nrow.pod AND baltur.datto = btdatto AND baltur.bsaacid = :nrow.bsaacid;
 
     ELSIF btdat < :nrow.pod THEN
         -- последний интервал начинается раньше даты проводки - меняем у него конечную дату и добавляем новый конечный интревал
         UPDATE baltur
            SET datto = :nrow.pod - 1
-         WHERE baltur.dat = btdat AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid AND baltur.datto = btdatto;
+         WHERE baltur.dat = btdat AND baltur.bsaacid = :nrow.bsaacid AND baltur.datto = btdatto;
 
         INSERT INTO baltur (dat, datto, datl, acc_id, bsaacid, obac, obbc, dtac, dtbc, ctac, ctbc)
              VALUES (:nrow.pod, btdatto, btdatl, cur_acc_id, :nrow.bsaacid,
@@ -74,7 +74,7 @@ BEGIN
                 (CASE WHEN baltur.dat = :nrow.pod THEN baltur.obbc ELSE baltur.obbc + (baltur.ctbc + baltur.dtbc) END)
                 INTO btdat, btdatto, btdatl, btbsaacid, btobac, btobbc
             FROM baltur WHERE (baltur.dat <= :nrow.pod AND :nrow.pod <= baltur.datto)
-                 AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid FOR UPDATE NOWAIT;
+                 AND baltur.bsaacid = :nrow.bsaacid FOR UPDATE NOWAIT;
         EXCEPTION
             WHEN NO_DATA_FOUND THEN
                 btdat := null; btdatto := null; btdatl := null; btbsaacid := null; btobac := null; btobbc := null;
@@ -83,7 +83,7 @@ BEGIN
         IF btbsaacid IS null THEN
             -- не нашли подходящий интервал, значит дата проводки раньше начала ведения баланса по счету
             -- создаем новый первый интервал баланса и корректируем остатки у всех последующих интервалов
-            SELECT min(baltur.dat) INTO btdat FROM baltur WHERE baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
+            SELECT min(baltur.dat) INTO btdat FROM baltur WHERE baltur.bsaacid = :nrow.bsaacid;
 
             IF btdat IS null THEN
                 btdatto := DB_CONF.C_MAX_BALANCE_DATE;
@@ -92,19 +92,19 @@ BEGIN
             END IF;
 
             INSERT INTO baltur (dat, datto, datl, acc_id, bsaacid, obac, obbc, dtac, dtbc, ctac, ctbc)
-                 VALUES (:nrow.pod, btdatto, btdatl, cur_acc_id, :nrow.bsaacid, 0, 0, curdtac, curdtbc, curctac, curctlc);
+                 VALUES (:nrow.pod, btdatto, nvl(btdatl, :nrow.pod), cur_acc_id, :nrow.bsaacid, 0, 0, curdtac, curdtbc, curctac, curctlc);
 
             UPDATE baltur
                SET
                    datl = (CASE WHEN (baltur.datl IS null) OR baltur.datl < btdatl THEN btdatl ELSE baltur.datl END),
                    obac = baltur.obac + (curctac + curdtac),
                    obbc = baltur.obbc + (curctlc + curdtbc)
-             WHERE btdatto < baltur.datto AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
+             WHERE btdatto < baltur.datto AND baltur.bsaacid = :nrow.bsaacid;
 
         ELSIF btdat < :nrow.pod THEN
             -- дата проводки попадает в найденный интервал - делим его на два, и корректируем остатки у всех последующих интервалов
             UPDATE baltur SET datto = :nrow.pod - 1
-             WHERE baltur.dat = btdat AND baltur.acc_id is null AND
+             WHERE baltur.dat = btdat AND
                    baltur.bsaacid = :nrow.bsaacid AND baltur.datto = btdatto;
 
             INSERT INTO baltur (dat, datto, datl, acc_id, bsaacid, obac, obbc, dtac, dtbc, ctac, ctbc)
@@ -115,7 +115,7 @@ BEGIN
                    datl = (case when (baltur.datl is null) OR baltur.datl < btdatl THEN btdatl ELSE baltur.datl END),
                    obac = baltur.obac + (curctac + curdtac),
                    obbc = baltur.obbc + (curctlc + curdtbc)
-             WHERE btdatto < baltur.datto AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
+             WHERE btdatto < baltur.datto AND baltur.bsaacid = :nrow.bsaacid;
 
         ELSIF btdat = :nrow.pod THEN
             -- дата проводки совпадает с началом найденного интервала
@@ -129,7 +129,7 @@ BEGIN
                    dtbc = (CASE WHEN baltur.dat = :nrow.pod THEN baltur.dtbc + curdtbc ELSE baltur.dtbc END),
                    ctac = (CASE WHEN baltur.dat = :nrow.pod THEN baltur.ctac + curctac ELSE baltur.ctac END),
                    ctbc = (CASE WHEN baltur.dat = :nrow.pod THEN baltur.ctbc + curctlc ELSE baltur.ctbc END)
-            WHERE btdatto <= baltur.datto AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
+            WHERE btdatto <= baltur.datto AND baltur.bsaacid = :nrow.bsaacid;
         END IF;
     END IF;
 END;
