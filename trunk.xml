@@ -16,6 +16,7 @@
     <item itemName="it0.0.3-sevastyanov-001-01">
         <file>SQL/PACKAGES/DB_CONF.sql</file>
     </item>
+<!--
     <item itemName="it0.0.3-sevastyanov-001-02">
         <body>
 drop procedure PROCESS_AE;
@@ -81,5 +82,20 @@ drop table gl_oper;
     </item>
     <item itemName="it0.0.3-sevastyanov-013">
         <file>SQL/TABLES/PST.sql</file>
+    </item>-->
+    <item itemName="it0.0.3-sevastyanov-014">
+        <file>SQL/TRIGGERS/PSTAI.sql</file>
+    </item>
+
+<!--TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS -->
+
+    <item itemName="it0.0.3-sevastyanov-test-01">
+        <file>SQL/TEST/test_pkg_balance.sql</file>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-test-02">
+        <body>
+begin test_pkg_balance.test_all(); end;
+/
+        </body>
     </item>
 </trunk>

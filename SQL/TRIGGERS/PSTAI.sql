@@ -1,4 +1,4 @@
-CREATE OR REPLACE TRIGGER pstai AFTER INSERT ON pst
+create or replace TRIGGER pstai AFTER INSERT ON pst
     REFERENCES new AS nrow FOR EACH ROW
 	WHEN (nrow.invisible <> '1')
 DECLARE
@@ -14,14 +14,14 @@ DECLARE
     btobac      NUMBER(19, 0); -- Остаток на начало дня DAT в валюте счета
     btobbc      NUMBER(19, 0); -- Входящий остаток в валюте локализации
 
-    cur_acc_id  NUMBER(22, 0) := null;
+    cur_acc_id  NUMBER(22, 0) := :nrow.acc_id;
 BEGIN
 
-    IF :nrow.amntlc >= 0 THEN
+    IF :nrow.amnt >= 0 THEN
         curdtac := 0; curdtbc := 0;
-        curctac := :nrow.amnt; curctlc := :nrow.amntlc;
-    ELSIF :nrow.amntlc < 0 THEN
-        curdtac := :nrow.amnt; curdtbc := :nrow.amntlc;
+        curctac := :nrow.amnt; curctlc := :nrow.amnt;
+    ELSIF :nrow.amnt < 0 THEN
+        curdtac := :nrow.amnt; curdtbc := :nrow.amnt;
         curctac := 0; curctlc := 0;
     END IF;
 
@@ -31,7 +31,7 @@ BEGIN
             (CASE WHEN baltur.dat = :nrow.pod THEN baltur.obac ELSE baltur.obac + (baltur.ctac + baltur.dtac) END),
             (CASE WHEN baltur.dat = :nrow.pod THEN baltur.obbc ELSE baltur.obbc + (baltur.ctbc + baltur.dtbc) END)
             INTO btdat, btdatto, btdatl, btbsaacid, btobac, btobbc
-        FROM baltur WHERE baltur.datto = to_date('01.01.2100', 'DD.MM.YYYY')
+        FROM baltur WHERE baltur.datto = DB_CONF.C_MAX_BALANCE_DATE
           AND baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid FOR UPDATE NOWAIT;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
@@ -43,7 +43,7 @@ BEGIN
     IF btbsaacid IS null THEN
         -- нет данных по остаткам - добавляем интервал
         INSERT INTO baltur (dat, datto, datl, acc_id, bsaacid, dtac, dtbc, ctac, ctbc)
-             VALUES (:nrow.pod, to_date('01.01.2100', 'DD.MM.YYYY'), btdatl, cur_acc_id,
+             VALUES (:nrow.pod, DB_CONF.C_MAX_BALANCE_DATE, btdatl, cur_acc_id,
                      :nrow.bsaacid, curdtac, curdtbc, curctac, curctlc);
     ELSIF btdat = :nrow.pod THEN
         -- последний интервал баланса совпадает с днем обрабатываемой проводки - просто корректируем обороты
@@ -86,7 +86,7 @@ BEGIN
             SELECT min(baltur.dat) INTO btdat FROM baltur WHERE baltur.acc_id is null AND baltur.bsaacid = :nrow.bsaacid;
 
             IF btdat IS null THEN
-                btdatto := to_date('01.01.2100', 'DD.MM.YYYY');
+                btdatto := DB_CONF.C_MAX_BALANCE_DATE;
             ELSE
                 btdatto := btdat - 1;
             END IF;
