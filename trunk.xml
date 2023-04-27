@@ -88,6 +88,12 @@ drop table gl_oper;
     <item itemName="it0.0.3-sevastyanov-015">
         <file>SQL/TRIGGERS/PSTAU.sql</file>
     </item>
+    <item itemName="it0.0.3-sevastyanov-016">
+        <file>SQL/TABLES/AC_GROUP_TYPE_PARAM.sql</file>
+    </item>
+    <item itemName="it0.0.3-sevastyanov-017">
+        <body>PURGE RECYCLEBIN;</body>
+    </item>
 
 <!--TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS -->
 

@@ -15,6 +15,12 @@
             <type>CHAR(3 CHAR)</type>
             <comments>Буквенный код валюты валютной позиции</comments>
         </column>
+        <column>
+            <name>AC_GROUP_TYPE</name>
+            <type>CHAR(3 CHAR)</type>
+            <comments>Тип группы счетов. Ссылка на справочник AC_GROUP_TYPE
+            </comments>
+        </column>
     </columns>
     <constraints>
         <constraint>
